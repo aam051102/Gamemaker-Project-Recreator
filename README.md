@@ -5,5 +5,3 @@ and use that first.
 To use this, simply download the exe file, then put it in the same folder as the Underdecomp exe.
 You'll then need to double run the exe and then it's pretty much straight forward from there.
 The only feature done, at the moment, is sprite conversion.
-
-As soon as I've finished developing this, I'll ask him to collaborate on a decompiler to all Gamemaker games.
