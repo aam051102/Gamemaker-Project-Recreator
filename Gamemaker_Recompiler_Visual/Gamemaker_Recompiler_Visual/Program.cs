@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 using System.Drawing;
+using System.Globalization;
 
 namespace Gamemaker_Recompiler_Visual
 {
@@ -262,52 +263,261 @@ namespace Gamemaker_Recompiler_Visual
             string clear_display_buffer = text.Substring(clear_display_buffer_a, clear_display_buffer_b - clear_display_buffer_a);
             System.Console.WriteLine("Clear Display Buffer: {0}", clear_display_buffer);
 
+            string view_index_area = "0";
+            List<string> view = new List<string> { };
+            List<string> view_visible = new List<string> { };
+
+            // VIEW SIZE
+            List<int> view_x = new List<int> { };
+            List<int> view_y = new List<int> { };
+            List<int> view_width = new List<int> { };
+            List<int> view_height = new List<int> { };
+
+            // PORT
+            List<int> view_port_x = new List<int> { };
+            List<int> view_port_y = new List<int> { };
+            List<int> view_port_width = new List<int> { };
+            List<int> view_port_height = new List<int> { };
+
+            // BORDER
+            List<int> view_border_x = new List<int> { };
+            List<int> view_border_y = new List<int> { };
+
+            // SPEED
+            List<int> view_speed_x = new List<int> { };
+            List<int> view_speed_y = new List<int> { };
+
+            // VIEW INDEX
+            List<int> view_index = new List<int> { };
+
             // VIEWS
-            if (Convert.ToBoolean(enable_views) == true)
+            if (Convert.ToBoolean(enable_views) == true && text.IndexOf("<Views>") != -1)
             {
                 int view_area_a = text.IndexOf("<Views>") + "<Views>".Length;
                 int view_area_b = text.IndexOf("</Views>");
+                //MessageBox.Show(name + "\n" + text);
+                //MessageBox.Show("a: " + view_area_a + "   b: " + view_area_b);
                 string view_area = text.Substring(view_area_a, view_area_b - view_area_a);
 
                 int view_index_area_a = view_area.LastIndexOf("<ViewIndex>") + "<ViewIndex>".Length;
                 int view_index_area_b = view_area.LastIndexOf("</ViewIndex>");
-                string view_index_area = view_area.Substring(view_index_area_a, view_index_area_b - view_index_area_a);
+                //MessageBox.Show("a: " + view_index_area_a + "   b: " + view_index_area_b);
+                view_index_area = view_area.Substring(view_index_area_a, view_index_area_b - view_index_area_a);
 
-                List<string> view = new List<string> { };
-                List<bool> view_visible = new List<bool> { };
-                List<int> view_width = new List<int> { };
-                List<int> view_height = new List<int> { };
-
-                // PORT
-                List<int> view_port_x = new List<int> { };
-                List<int> view_port_y = new List<int> { };
-                List<int> view_port_width = new List<int> { };
-                List<int> view_port_height = new List<int> { };
-
-                // BORDER
-                List<int> view_border_x = new List<int> { };
-                List<int> view_border_y = new List<int> { };
-
-                // SPEED
-                List<int> view_speed_x = new List<int> { };
-                List<int> view_speed_y = new List<int> { };
-
-                // VIEW INDEX
-                List<int> view_index = new List<int> { };
-
-                for (var n = 0; n < Convert.ToUInt32(view_index_area) + 1; n++)
+                for (var n = 0; n < Convert.ToInt32(view_index_area) + 1; n++)
                 {
                     int view_a = view_area.IndexOf("<File.Room.View>") + "<File.Room.View>".Length;
                     int view_b = view_area.IndexOf("</File.Room.View>");
-                    view.Add(view_area.Substring(view_area_a, view_area_b - view_area_a));
+                    view.Add(view_area.Substring(view_a, view_b - view_a));
 
+                    // VIEW VISIBLE
+                    int view_visible_a = view[n].IndexOf("<Visible>") + "<Visible>".Length;
+                    int view_visible_b = view[n].IndexOf("</Visible>");
+                    view_visible.Add(view[n].Substring(view_visible_a, view_visible_b - view_visible_a));
 
+                    // VIEW X
+                    int view_x_a = view[n].IndexOf("<X>") + "<X>".Length;
+                    int view_x_b = view[n].IndexOf("</X>");
+
+                    view_x.Add(Convert.ToInt32(view[n].Substring(view_x_a, view_x_b - view_x_a)));
+
+                    // VIEW Y
+                    int view_y_a = view[n].IndexOf("<Y>") + "<Y>".Length;
+                    int view_y_b = view[n].IndexOf("</Y>");
+                    view_y.Add(Convert.ToInt32(view[n].Substring(view_y_a, view_y_b - view_y_a)));
+
+                    // VIEW WIDTH
+                    int view_width_a = view[n].IndexOf("<Width>") + "<Width>".Length;
+                    int view_width_b = view[n].IndexOf("</Width>");
+                    view_width.Add(Convert.ToInt32(view[n].Substring(view_width_a, view_width_b - view_width_a)));
+
+                    // VIEW HEIGHT
+                    int view_height_a = view[n].IndexOf("<Height>") + "<Height>".Length;
+                    int view_height_b = view[n].IndexOf("</Height>");
+                    view_height.Add(Convert.ToInt32(view[n].Substring(view_height_a, view_height_b - view_height_a)));
+
+                    // VIEW PORT X
+                    int view_port_x_a = view[n].IndexOf("<Port_X>") + "<Port_X>".Length;
+                    int view_port_x_b = view[n].IndexOf("</Port_X>");
+                    view_port_x.Add(Convert.ToInt32(view[n].Substring(view_port_x_a, view_port_x_b - view_port_x_a)));
+
+                    // VIEW PORT Y
+                    int view_port_y_a = view[n].IndexOf("<Port_Y>") + "<Port_Y>".Length;
+                    int view_port_y_b = view[n].IndexOf("</Port_Y>");
+                    view_port_y.Add(Convert.ToInt32(view[n].Substring(view_port_y_a, view_port_y_b - view_port_y_a)));
+
+                    // VIEW PORT WIDTH
+                    int view_port_width_a = view[n].IndexOf("<Port_Width>") + "<Port_Width>".Length;
+                    int view_port_width_b = view[n].IndexOf("</Port_Width>");
+                    view_port_width.Add(Convert.ToInt32(view[n].Substring(view_port_width_a, view_port_width_b - view_port_width_a)));
+
+                    // VIEW PORT HEIGHT
+                    int view_port_height_a = view[n].IndexOf("<Port_Height>") + "<Port_Height>".Length;
+                    int view_port_height_b = view[n].IndexOf("</Port_Height>");
+                    view_port_height.Add(Convert.ToInt32(view[n].Substring(view_port_height_a, view_port_height_b - view_port_height_a)));
+
+                    // VIEW BORDER X
+                    int view_border_x_a = view[n].IndexOf("<Border_X>") + "<Border_X>".Length;
+                    int view_border_x_b = view[n].IndexOf("</Border_X>");
+                    view_border_x.Add(Convert.ToInt32(view[n].Substring(view_border_x_a, view_border_x_b - view_border_x_a)));
+
+                    // VIEW BORDER Y
+                    int view_border_y_a = view[n].IndexOf("<Border_Y>") + "<Border_Y>".Length;
+                    int view_border_y_b = view[n].IndexOf("</Border_Y>");
+                    view_border_y.Add(Convert.ToInt32(view[n].Substring(view_border_y_a, view_border_y_b - view_border_y_a)));
+
+                    // VIEW SPEED X
+                    int view_speed_x_a = view[n].IndexOf("<Speed_X>") + "<Speed_X>".Length;
+                    int view_speed_x_b = view[n].IndexOf("</Speed_X>");
+                    view_speed_x.Add(Convert.ToInt32(view[n].Substring(view_speed_x_a, view_speed_x_b - view_speed_x_a)));
+
+                    // VIEW SPEED Y
+                    int view_speed_y_a = view[n].IndexOf("<Speed_Y>") + "<Speed_Y>".Length;
+                    int view_speed_y_b = view[n].IndexOf("</Speed_Y>");
+                    view_speed_y.Add(Convert.ToInt32(view[n].Substring(view_speed_y_a, view_speed_y_b - view_speed_y_a)));
+
+                    // VIEW INDEX
+                    int view_index_a = view[n].IndexOf("<ViewIndex>") + "<ViewIndex>".Length;
+                    int view_index_b = view[n].IndexOf("</ViewIndex>");
+                    view_index.Add(Convert.ToInt32(view[n].Substring(view_index_a, view_index_b - view_index_a)));
+                }
+            }
+
+            // TILES
+            // TILE AREA
+            int tile_area_a = text.IndexOf("<Tiles>") + "<Tiles>".Length;
+            int tile_area_b = text.IndexOf("</Tiles>");
+            string tile_area = "";
+            bool tile_used = false;
+            int tile_last_index_a = 0;
+            int tile_last_index_b = 0;
+            int tile_last_index = -1;
+            //MessageBox.Show("a: " + tile_area_a + "   b: " + tile_area_b);
+            if (tile_area_a != 6)
+            {
+                tile_area = text.Substring(tile_area_a, tile_area_b - tile_area_a);
+                tile_used = true;
+
+                // TILE LAST INDEX
+                tile_last_index_a = tile_area.LastIndexOf("<index>") + "<index>".Length;
+                tile_last_index_b = tile_area.LastIndexOf("</index>");
+                //MessageBox.Show("a: " + tile_last_index_a + "   b: " + tile_last_index_b);
+                //MessageBox.Show(tile_area);
+                tile_last_index = Convert.ToInt32(tile_area.Substring(tile_last_index_a, tile_last_index_b - tile_last_index_a)) + 1;
+            }
+
+            //MessageBox.Show("RAN");
+
+            // TILE DATA
+            List<string> tile_file = new List<string> {  };
+            List<int> tile_index = new List<int> {  };
+            List<int> tile_x = new List<int> {  };
+            List<int> tile_y = new List<int> {  };
+            List<int> tile_back_index = new List<int> {  };
+            List<int> tile_offset_x = new List<int> {  };
+            List<int> tile_offset_y = new List<int> {  };
+            List<int> tile_width = new List<int> {  };
+            List<int> tile_height = new List<int> {  };
+            List<int> tile_depth = new List<int> {  };
+            List<int> tile_id = new List<int> {  };
+            List<int> tile_xscale = new List<int> {  };
+            List<int> tile_yscale = new List<int> {  };
+            //List<int> tile_blend = new List<int> { 0 };
+
+            for (var n = 0; n < tile_last_index; n++)
+            {
+                if (tile_last_index != -1)
+                {
+                    //MessageBox.Show("FOR RAN");
+
+                    int tile_file_a = tile_area.IndexOf("<File.Room.Tile>") + "<File.Room.Tile>".Length;
+                    int tile_file_b = tile_area.IndexOf("</File.Room.Tile>");
+
+                    //MessageBox.Show(Convert.ToString(tile_file_b - tile_file_a));
+
+                    tile_file.Add(tile_area.Substring(tile_file_a, tile_file_b - tile_file_a));
+
+                    //MessageBox.Show(tile_file[n]);
+
+                    int tile_index_a = tile_file[n].IndexOf("<index>") + "<index>".Length;
+                    int tile_index_b = tile_file[n].IndexOf("</index>");
+                    tile_index.Add(Convert.ToInt32(tile_file[n].Substring(tile_index_a, tile_index_b - tile_index_a)));
+
+                    //MessageBox.Show("INDEX RAN");
+
+                    int tile_x_a = tile_file[n].IndexOf("<X>") + "<X>".Length;
+                    int tile_x_b = tile_file[n].IndexOf("</X>");
+                    tile_x.Add(Convert.ToInt32(tile_file[n].Substring(tile_x_a, tile_x_b - tile_x_a)));
+
+                    //MessageBox.Show("X RAN");
+
+                    int tile_y_a = tile_file[n].IndexOf("<Y>") + "<Y>".Length;
+                    int tile_y_b = tile_file[n].IndexOf("</Y>");
+                    tile_y.Add(Convert.ToInt32(tile_file[n].Substring(tile_y_a, tile_y_b - tile_y_a)));
+
+                    //MessageBox.Show("Y RAN");
+
+                    int tile_back_index_a = tile_file[n].IndexOf("<Background_Index>") + "<Background_Index>".Length;
+                    int tile_back_index_b = tile_file[n].IndexOf("</Background_Index>");
+                    tile_back_index.Add(Convert.ToInt32(tile_file[n].Substring(tile_back_index_a, tile_back_index_b - tile_back_index_a)));
+
+                    //MessageBox.Show("BACK INDEX RAN");
+
+                    int tile_offset_x_a = tile_file[n].IndexOf("<Offset_X>") + "<Offset_X>".Length;
+                    int tile_offset_x_b = tile_file[n].IndexOf("</Offset_X>");
+                    tile_offset_x.Add(Convert.ToInt32(tile_file[n].Substring(tile_offset_x_a, tile_offset_x_b - tile_offset_x_a)));
+
+                    //MessageBox.Show("X OFFSET RAN");
+
+                    int tile_offset_y_a = tile_file[n].IndexOf("<Offset_Y>") + "<Offset_Y>".Length;
+                    int tile_offset_y_b = tile_file[n].IndexOf("</Offset_Y>");
+                    tile_offset_y.Add(Convert.ToInt32(tile_file[n].Substring(tile_offset_y_a, tile_offset_y_b - tile_offset_y_a)));
+
+                    //MessageBox.Show("Y OFFSET RAN");
+
+                    int tile_width_a = tile_file[n].IndexOf("<Width>") + "<Width>".Length;
+                    int tile_width_b = tile_file[n].IndexOf("</Width>");
+                    tile_width.Add(Convert.ToInt32(tile_file[n].Substring(tile_width_a, tile_width_b - tile_width_a)));
+
+                    //MessageBox.Show("WIDTH RAN");
+
+                    int tile_height_a = tile_file[n].IndexOf("<Height>") + "<Height>".Length;
+                    int tile_height_b = tile_file[n].IndexOf("</Height>");
+                    tile_height.Add(Convert.ToInt32(tile_file[n].Substring(tile_height_a, tile_height_b - tile_height_a)));
+
+                    //MessageBox.Show("HEIGHT RAN");
+
+                    int tile_depth_a = tile_file[n].IndexOf("<Depth>") + "<Depth>".Length;
+                    int tile_depth_b = tile_file[n].IndexOf("</Depth>");
+                    tile_depth.Add(Convert.ToInt32(tile_file[n].Substring(tile_depth_a, tile_depth_b - tile_depth_a)));
+
+                    //MessageBox.Show("DEPTH RAN");
+
+                    int tile_id_a = tile_file[n].IndexOf("<Id>") + "<Id>".Length;
+                    int tile_id_b = tile_file[n].IndexOf("</Id>");
+                    tile_id.Add(Convert.ToInt32(tile_file[n].Substring(tile_id_a, tile_id_b - tile_id_a)));
+
+                    //MessageBox.Show("ID RAN");
+
+                    int tile_xscale_a = tile_file[n].IndexOf("<Scale_X>") + "<Scale_X>".Length;
+                    int tile_xscale_b = tile_file[n].IndexOf("</Scale_X>");
+                    tile_xscale.Add(Convert.ToInt32(tile_file[n].Substring(tile_xscale_a, tile_xscale_b - tile_xscale_a)));
+
+                    //MessageBox.Show("SCALE X RAN");
+
+                    int tile_yscale_a = tile_file[n].IndexOf("<Scale_Y>") + "<Scale_Y>".Length;
+                    int tile_yscale_b = tile_file[n].IndexOf("</Scale_Y>");
+                    tile_yscale.Add(Convert.ToInt32(tile_file[n].Substring(tile_yscale_a, tile_yscale_b - tile_yscale_a)));
+
+                    //MessageBox.Show("SCALE Y RAN");
+
+                    tile_area = tile_area.Remove(0, tile_area.IndexOf("</File.Room.Tile>") + "</File.Room.Tile>".Length);
                 }
             }
 
             // REWRITE
             string rewrite = "";
-            rewrite += "<!--This Document is generated by GameMaker, if you edit it by hand then you do so at your own risk!-->@";
+            rewrite += "<!--This Document is generated by GameMaker Project Recreater, if you edit it by hand then you do so at your own risk!-->@";
             rewrite += "<room>@";
 
             rewrite += "    <caption></caption>@";
@@ -356,12 +566,27 @@ namespace Gamemaker_Recompiler_Visual
             rewrite += "    </backgrounds>@";
             rewrite += "    <views>@";
 
-            rewrite += "        <view visible=\"" + "0" + "\" objName=\"" + "&alt;undefined&gt;" + "\" xview=\"" + "0" + "\" yview=\"" + "0" + "\"wview=\"" + "1024" + "\" hview=\"" + "768" + "\" xport=\"" + "0" + "\" yport=\"" + "0" + "\" wport=\"" + "1024" + "\" hport=\"" + "768" + "\" hborder=\"" + "32" + "\" vborder=\"" + "32" + "\" hspeed=\"" + "-1" + "\" vspeed=\"" + "-1" + "\"/>";
+
+            if (Convert.ToBoolean(enable_views) == true && text.IndexOf("<Views>") != -1)
+            {
+                for (var n = 0; n < Convert.ToInt32(view_index_area) + 1; n++)
+                {
+                    rewrite += "        <view visible=\"" + Convert.ToInt32(Convert.ToBoolean(view_visible[n])) + "\" objName=\"" + "&alt;undefined&gt;" + "\" xview=\"" + view_x[n] + "\" yview=\"" + view_y[n] + "\" wview=\"" + view_width[n] + "\" hview=\"" + view_height[n] + "\" xport=\"" + view_port_x[n] + "\" yport=\"" + view_port_y[n] + "\" wport=\"" + view_port_width[n] + "\" hport=\"" + view_port_height[n] + "\" hborder=\"" + view_border_x[n] + "\" vborder=\"" + view_border_y[n] + "\" hspeed=\"" + view_speed_x[n] + "\" vspeed=\"" + view_speed_y[n] + "\"/>@";
+                }
+            }
+            for (var n = 0; n < 8 - (Convert.ToInt32(view_index_area) + 1); n++)
+            {
+                rewrite += "        <view visible=\"" + "0" + "\" objName=\"" + "" + "\" xview=\"" + "0" + "\" yview=\"" + "0" + "\" wview=\"" + "1024" + "\" hview=\"" + "768" + "\" xport=\"" + "0" + "\" yport=\"" + "0" + "\" wport=\"" + "1024" + "\" hport=\"" + "768" + "\" hborder=\"" + "32" + "\" vborder=\"" + "32" + "\" hspeed=\"" + "-1" + "\" vspeed=\"" + "-1" + "\"/>@";
+            }
+            if (8 - (Convert.ToInt32(view_index_area) + 1) == -1)
+            {
+                rewrite += "        <view visible=\"" + "0" + "\" objName=\"" + "" + "\" xview=\"" + "0" + "\" yview=\"" + "0" + "\" wview=\"" + "1024" + "\" hview=\"" + "768" + "\" xport=\"" + "0" + "\" yport=\"" + "0" + "\" wport=\"" + "1024" + "\" hport=\"" + "768" + "\" hborder=\"" + "32" + "\" vborder=\"" + "32" + "\" hspeed=\"" + "-1" + "\" vspeed=\"" + "-1" + "\"/>@";
+            }
 
             rewrite += "    </views>@";
             rewrite += "    <instances>@";
 
-            if (object_indexes != "-1") {
+            if (Convert.ToInt32(object_indexes) != -1) {
                 for (int i = 0; i < Convert.ToInt32(object_indexes) + 1; i++)
                 {
                     if (instance_cc[i] != "") {
@@ -373,7 +598,20 @@ namespace Gamemaker_Recompiler_Visual
             }
 
             rewrite += "    </instances>@";
-            rewrite += "    <tiles/>@";
+            if (tile_used == false)
+            {
+                rewrite += "    <tiles/>@";
+            }
+            else
+            {
+                rewrite += "    <tiles>@";
+
+                for (var n = 0; n < tile_last_index; n++) {
+                    rewrite += "        <tile bgName=\"" + tile_back_index[n] + "\" x=\"" + tile_x[n] + "\" y=\"" + tile_y[n] + "\" w=\"" + tile_width[n] + "\" h=\"" + tile_height[n] + "\" xo=\"" + tile_offset_x[n] + "\" yo=\"" + tile_offset_y[n] + "\" id=\"" + tile_id[n] + "\" name=\"" + "inst_" + tile_id[n]+n + "\" depth=\"" + tile_depth[n] + "\" locked=\"" + "0" + "\" colour=\"" + "4294967295" + "\" scaleX=\"" + tile_xscale[n] + "\" scaleY=\"" + tile_yscale[n] + "\"/>@";
+                }
+
+                rewrite += "    </tiles>@";
+            }
             rewrite += "    <PhysicsWorld>" + "0" + "</PhysicsWorld>@";
             rewrite += "    <PhysicsWorldTop>" + "0" + "</PhysicsWorldTop>@";
             rewrite += "    <PhysicsWorldLeft>" + "0" + "</PhysicsWorldLeft>@";
@@ -429,45 +667,180 @@ namespace Gamemaker_Recompiler_Visual
             if (text != "")
             {
                 // GENERAL INFORMATION
+                // GENERAL OBJECT INFO
+                int object_info_a = text.IndexOf("Object:") + "Object:".Length;
+                int object_info_b = text.IndexOf("/*");
+                string object_info = text.Substring(object_info_a, object_info_b - object_info_a);
+
+                //MessageBox.Show("OBJECT");
+
                 // NAME
-                /*int name_a = text.IndexOf("Object:") + "Object:".Length;
-                int name_b = text.IndexOf("//*");
-                int name_c = text.IndexOf("builtin.name = \"") + "builtin.name = \"".Length;
-                int name_d = text.IndexOf("\"");
-                string name = text.Substring(name_a, name_b - name_a).Substring(name_c, name_d - name_c);*/
-                string name = file.Remove(file.Length-3);
+                int name_a = object_info.IndexOf("builtin.name = \"") + "builtin.name = \"".Length;
+                int name_b = object_info.Remove(0, name_a).IndexOf("\"") + name_a;
+                //MessageBox.Show("A: " + Convert.ToString(name_a) + "   B: " + Convert.ToString(name_b) + System.Environment.NewLine + "   TEXT: " + object_info.Substring(name_a, name_b - name_a));
+                string name = object_info.Substring(name_a, name_b - name_a);
+
+                //MessageBox.Show("NAME");
+
+                // SPRITE
+                int sprite_a = object_info.IndexOf("builtin.sprite_index = ") + "builtin.sprite_index = ".Length;
+                int sprite_b = object_info.Remove(0, sprite_a).IndexOf("builtin.") + sprite_a;
+                string sprite = object_info.Substring(sprite_a, sprite_b - sprite_a);
+                if (sprite.StartsWith("-1")) sprite = "";
+                else
+                {
+                    sprite = sprite.Remove(0, sprite.IndexOf("\"") + 1);
+                    sprite = sprite.Substring(0, sprite.IndexOf("\""));
+                }
+
+                //MessageBox.Show("SPRITE");
+
+                // VISIBLE
+                int visible_a = object_info.IndexOf("builtin.visible = ") + "builtin.visible = ".Length;
+                int visible_b = object_info.IndexOf("builtin.") + visible_a;
+                //MessageBox.Show(Convert.ToString(Convert.ToInt32(Convert.ToBoolean(object_info.Substring(visible_a, visible_b - visible_a)))));
+                int visible = Convert.ToInt32(Convert.ToBoolean(object_info.Substring(visible_a, visible_b - visible_a)));
+                if (visible == 1) visible = -1;
+
+                //MessageBox.Show("VISIBLE");
+
+                // SOLID
+                int solid_a = object_info.IndexOf("builtin.solid = ") + "builtin.solid = ".Length;
+                int solid_b = object_info.IndexOf("builtin.") + solid_a;
+                int solid = Convert.ToInt32(Convert.ToBoolean(object_info.Substring(solid_a, solid_b - solid_a)));
+                if (solid == 1) solid = -1;
+
+                //MessageBox.Show("SOLID");
+
+                // PERSISTENT
+                int persistent_a = object_info.IndexOf("builtin.persistent = ") + "builtin.persistent = ".Length;
+                int persistent_b = object_info.IndexOf("builtin.") + persistent_a;
+                int persistent = Convert.ToInt32(Convert.ToBoolean(object_info.Substring(persistent_a, persistent_b - persistent_a)));
+                if (persistent == 1) persistent = -1;
+
+                //MessageBox.Show("PERSISTENT");
+
+                // DEPTH
+                int depth_a = text.IndexOf("builtin.depth = ") + "builtin.depth = ".Length;
+                int depth_b = text.IndexOf("/*");
+                int depth = Convert.ToInt32(text.Substring(depth_a, depth_b - depth_a));
+                if (depth == 1) depth = -1;
+
+                //MessageBox.Show("DEPTH");
+
+                // PARENT NAME
+                string parent_name = "&lt;undefined&gt;";
+                if (object_info.IndexOf("builtin.parent_name = \"") != -1)
+                {
+                    int parent_name_a = object_info.IndexOf("builtin.parent_name = ") + "builtin.parent_name = ".Length;
+                    int parent_name_b = object_info.Remove(0, parent_name_a).IndexOf("builtin.") + parent_name_a;
+                    parent_name = object_info.Substring(parent_name_a, parent_name_b - parent_name_a);
+
+                    parent_name = parent_name.Remove(0, parent_name.IndexOf("\"") + 1);
+                    parent_name = parent_name.Substring(0, parent_name.IndexOf("\""));
+                }
+
+                //MessageBox.Show("PARENT");
+
+                // MASK NAME
+                string mask_name = "&lt;undefined&gt;";
+                if (object_info.IndexOf("builtin.mask_name = \"") != -1)
+                {
+                    int mask_name_a = object_info.IndexOf("builtin.mask_name = ") + "builtin.mask_name = ".Length;
+                    int mask_name_b = object_info.Remove(0, mask_name_a).IndexOf("builtin.") + mask_name_a;
+                    mask_name = object_info.Substring(mask_name_a, mask_name_b - mask_name_a);
+
+                    mask_name = mask_name.Remove(0, mask_name.IndexOf("\"") + 1);
+                    mask_name = mask_name.Substring(0, mask_name.IndexOf("\""));
+                }
+
+                //string name = file.Remove(file.Length-3);
 
                 // CODE
-                //string[] code = new string[100];
-                //code[0] = System.IO.File.ReadAllText(@path.Remove(path.Length - path.LastIndexOf("\\") - 1) + "code\\" + "gml_Object_" + name + ".js");
+                string code_path = @path.Remove(path.Length - path.LastIndexOf("\\") - 1) + "code\\" + "gml_Object_" + name;
+                int code_index = 0;
+                string code_list = text;
+
+                List<string> code = new List<string> { "" };
+                List<string> code_event_name = new List<string> { "" };
+                List<int> code_enumb = new List<int> { 0 };
+
+                while (code_list.IndexOf("Event: ") != -1)
+                {
+                    code_index += 1;
+
+                    int code_event_name_a = code_list.IndexOf("Event: ") + "Event: ".Length;
+                    int code_event_name_b = code_list.Remove(0, code_event_name_a).IndexOf(System.Environment.NewLine) + code_event_name_a;
+                    code_event_name.Add(code_list.Substring(code_event_name_a, code_event_name_b - code_event_name_a));
+
+                    if (code_event_name[code_index].IndexOf("[") != -1)
+                    {
+                        code.Add(code_path + CultureInfo.CurrentCulture.TextInfo.ToTitleCase(code_event_name[code_index].Remove(0, 2)).Substring(0, code_event_name[code_index].IndexOf("[") - (code_event_name[code_index].IndexOf("]") - code_event_name[code_index].IndexOf("["))) + "_" + code_event_name[code_index].Substring(code_event_name[code_index].IndexOf("[") + 1, code_event_name[code_index].IndexOf("]") - (code_event_name[code_index].IndexOf("[") + 1)) + ".js");
+                    }
+                    else
+                    {
+                        code.Add(code_path + CultureInfo.CurrentCulture.TextInfo.ToTitleCase(code_event_name[code_index].Remove(0, 2)) + "_" + "0" + ".js");
+                    }
+
+                    // CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Text)
+
+                    //MessageBox.Show(code[code_index]);
+
+                    code_list = code_list.Remove(code_list.IndexOf("Event: "), "Event: ".Length);
+                }
+
+
 
                 // REWRITE
                 string rewrite = "";
-                rewrite += "<!--This Document is generated by GameMaker, if you edit it by hand then you do so at your own risk!-->@";
+                rewrite += "<!--This Document is generated by GameMaker Project Recreater, if you edit it by hand then you do so at your own risk!-->@";
                 rewrite += "<object>@";
-                rewrite += "    <spriteName>" + name + "</spriteName>@";
-                rewrite += "    <solid>" + "" + "</solid>@";
-                rewrite += "    <visible>" + "" + "</visible>@";
-                rewrite += "    <depth>" + "" + "</depth>@";
-                rewrite += "    <persistent>" + "" + "</persistent>@";
-                rewrite += "    <parentName>" + "" + "</parentName>@";
-                rewrite += "    <maskName>" + "" + "</maskName>@";
-                rewrite += "    <events>@";
+                rewrite += "    <spriteName>" + sprite + "</spriteName>@";
+                rewrite += "    <solid>" + solid + "</solid>@";
+                rewrite += "    <visible>" + visible + "</visible>@";
+                rewrite += "    <depth>" + depth + "</depth>@";
+                rewrite += "    <persistent>" + persistent + "</persistent>@";
+                rewrite += "    <parentName>" + parent_name + "</parentName>@";
+                rewrite += "    <maskName>" + mask_name + "</maskName>@";
+
+                if (code_index != 0)
+                {
+                    rewrite += "    <events>@";
+
+                    for (var n = 1; n < code_index + 1; n++)
+                    {
+                        if (code_event_name[n].IndexOf("[") != -1)
+                        {
+                            rewrite += "        <event eventtype=\"" + Event_To_Number(code_event_name[n]) + "\" enumb=\"" + code_event_name[n].Substring(code_event_name[n].IndexOf("[") + 1, code_event_name[n].IndexOf("]") - (code_event_name[n].IndexOf("[") + 1)) + "\">@";
+                        }
+                        else
+                        {
+                            rewrite += "        <event eventtype=\"" + Event_To_Number(code_event_name[n]) + "\" enumb=\"" + "0" + "\">@";
+                        }
 
 
 
-                rewrite += "    </events>@";
-                rewrite += "    <PhysicsObject>" + "" + "</PhysicsObject>@";
-                rewrite += "    <PhysicsObjectSensor>" + "" + "</PhysicsObjectSensor>@";
-                rewrite += "    <PhysicsObjectShape>" + "" + "</PhysicsObjectShape>@";
-                rewrite += "    <PhysicsObjectDensity>" + "" + "</PhysicsObjectDensity>@";
-                rewrite += "    <PhysicsObjectRestitution>" + "" + "</PhysicsObjectRestitution>@";
-                rewrite += "    <PhysicsObjectGroup>" + "" + "</PhysicsObjectGroup>@";
-                rewrite += "    <PhysicsObjectLinearDamping>" + "" + "</PhysicsObjectLinearDamping>@";
-                rewrite += "    <PhysicsObjectAngularDamping>" + "" + "</PhysicsObjectAngularDamping>@";
-                rewrite += "    <PhysicsObjectAwake>" + "" + "</PhysicsObjectAwake>@";
-                rewrite += "    <PhysicsObjectKinematic>" + "" + "</PhysicsObjectKinematic>@";
-                rewrite += "    <PhysicsShapePoints>" + "" + "</PhysicsShapePoints>@";
+                        rewrite += "        </event>@";
+                    }
+
+                    rewrite += "    </events>@";
+                }
+                else
+                {
+                    rewrite += "    <events/>@";
+                }
+                rewrite += "    <PhysicsObject>" + "0" + "</PhysicsObject>@";
+                rewrite += "    <PhysicsObjectSensor>" + "0" + "</PhysicsObjectSensor>@";
+                rewrite += "    <PhysicsObjectShape>" + "0" + "</PhysicsObjectShape>@";
+                rewrite += "    <PhysicsObjectDensity>" + "0.5" + "</PhysicsObjectDensity>@";
+                rewrite += "    <PhysicsObjectRestitution>" + "0.1" + "</PhysicsObjectRestitution>@";
+                rewrite += "    <PhysicsObjectGroup>" + "0" + "</PhysicsObjectGroup>@";
+                rewrite += "    <PhysicsObjectLinearDamping>" + "0.1" + "</PhysicsObjectLinearDamping>@";
+                rewrite += "    <PhysicsObjectAngularDamping>" + "0.1" + "</PhysicsObjectAngularDamping>@";
+                rewrite += "    <PhysicsObjectFriction>" + "0.2" + "</PhysicsObjectFriction>@";
+                rewrite += "    <PhysicsObjectAwake>" + "-1" + "</PhysicsObjectAwake>@";
+                rewrite += "    <PhysicsObjectKinematic>" + "0" + "</PhysicsObjectKinematic>@";
+                rewrite += "    <PhysicsShapePoints/>@";
                 rewrite += "</object>@";
 
                 rewrite = rewrite.Replace("@", "" + System.Environment.NewLine);
@@ -477,11 +850,32 @@ namespace Gamemaker_Recompiler_Visual
 
                 File.Close();
 
+
+
                 System.IO.File.WriteAllText(path + "converted\\" + name + ".object.gmx", rewrite);
 
                 //Form.log_text.Add(System.IO.File.ReadAllText(path + "converted\\" + name + ".sprite.gmx") +
                 //    "\n has been output to file " + name + ".sprite.gmx" + ", path " + path + "converted");
             }
+        }
+
+        public static int Event_To_Number(string Event) {
+            var Number = 0;
+
+            if (Event.IndexOf("[") != -1) {
+                if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Event.Remove(0, 2)).Substring(0, Event.IndexOf("[") - (Event.IndexOf("]") - Event.IndexOf("["))) == "Create")
+                {
+                    Number = 0;
+                }
+            } else
+            {
+                if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Event.Remove(0, 2)) == "Create")
+                {
+                    Number = 0;
+                }
+            }
+
+            return Number;
         }
 
         public static string[] Get_Files(string path)
@@ -836,7 +1230,7 @@ namespace Gamemaker_Recompiler_Visual
 
                 // REWRITE
                 string rewrite = "";
-            rewrite += "<!--This Document is generated by GameMaker, if you edit it by hand then you do so at your own risk!-->@";
+            rewrite += "<!--This Document is generated by GameMaker Project Recreater, if you edit it by hand then you do so at your own risk!-->@";
             rewrite += "<font>@";
             rewrite += "    <name>" + name + "</name>@";
             rewrite += "    <size>" + size + "</size>@";
@@ -1062,7 +1456,7 @@ namespace Gamemaker_Recompiler_Visual
 
             // REWRITE
             string rewrite = "";
-            rewrite += "<!--This Document is generated by GameMaker, if you edit it by hand then you do so at your own risk!-->@";
+            rewrite += "<!--This Document is generated by GameMaker Project Recreater, if you edit it by hand then you do so at your own risk!-->@";
             rewrite += "<background>@";
             rewrite += "    <istileset>" + "0" + "</istileset>@";
             rewrite += "    <tilewidth>" + "0" + "</tilewidth>@";
@@ -1176,7 +1570,7 @@ namespace Gamemaker_Recompiler_Visual
 
             // REWRITE
             string rewrite = "";
-            rewrite += "<!--This Document is generated by GameMaker, if you edit it by hand then you do so at your own risk!-->@";
+            rewrite += "<!--This Document is generated by GameMaker Project Recreater, if you edit it by hand then you do so at your own risk!-->@";
             rewrite += "<sound>@";
             rewrite += "    <kind>" + "3" + "</kind>@";
             rewrite += "    <extension>" + extension + "</extension>@";
@@ -1507,7 +1901,7 @@ namespace Gamemaker_Recompiler_Visual
 
             // REWRITE
             string rewrite = "";
-            rewrite += "<!--This Document is generated by GameMaker, if you edit it by hand then you do so at your own risk!-->@";
+            rewrite += "<!--This Document is generated by GameMaker Project Recreater, if you edit it by hand then you do so at your own risk!-->@";
             rewrite += "<sprite>@";
             rewrite += "    <type>" + type + "</type>@";
             rewrite += "    <xorig>" + orig_x + "</xorig>@";
