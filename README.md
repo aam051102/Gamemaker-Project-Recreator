@@ -5,7 +5,7 @@ Link: https://github.com/WarlockD/GMdsam
 
 To use this, simply download the exe file, then put it in the same folder as the Underdecomp exe.
 You'll then need to double run the exe and then it's pretty much straight forward from there.
-Currently, all features but rooms and objects are available.
+Currently, all features but objects are available.
 
 
 PLEASE NOTE THAT YOU MAY NEED TO CONFIGURE A FEW THINGS IN GAMEMAKER STUDIO ITSELF.
