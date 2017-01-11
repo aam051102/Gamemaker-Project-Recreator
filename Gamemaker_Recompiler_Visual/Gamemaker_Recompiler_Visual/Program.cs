@@ -1241,7 +1241,7 @@ namespace Gamemaker_Recompiler_Visual
             rewrite += "    <aa>" + anti_alias + "</aa>@";
             rewrite += "    <includeTTF>" + "0" + "</includeTTF>@";
             rewrite += "    <TTFName>" + "" + "</TTFName>@";
-            rewrite += "    <textgroups>@" + "        <texgroup0>" + "0" + "</textgroup0>@" + "    </texgroups>@";
+            rewrite += "    <textgroups>@" + "        <textgroup0>" + "0" + "</textgroup0>@" + "    </textgroups>@";
             rewrite += "    <ranges>@" + "        <range0>" + width + "," + height + "</range0>@" + "    </ranges>@";
             rewrite += "    <glyphs>@";
 
