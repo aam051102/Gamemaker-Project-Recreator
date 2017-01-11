@@ -7,5 +7,7 @@ To use this, simply download the exe file, then put it in the same folder as the
 You'll then need to double run the exe and then it's pretty much straight forward from there.
 Currently, all features but objects are available.
 
+If the program doesn't respond, no worries, it's just working, if any errors come up, restart it.
+
 
 PLEASE NOTE THAT YOU MAY NEED TO CONFIGURE A FEW THINGS IN GAMEMAKER STUDIO ITSELF.
