@@ -1,5 +1,5 @@
 # Gamemaker-Recompiler
-This is a Gamemaker: Studio project recompiler, I'm building it based on data by WarlockD's Underdecomp, this means that you'll have to download and use that first.
+This is a Gamemaker: Studio project recompiler, I'm building it based on data by WarlockD's GMDSam ( Underdecomp ), this means that you'll have to download and use that first.
 
 Link: https://github.com/WarlockD/GMdsam
 
