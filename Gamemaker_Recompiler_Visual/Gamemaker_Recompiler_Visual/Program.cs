@@ -1886,7 +1886,7 @@ namespace Gamemaker_Recompiler_Visual
             string height_spr = text.Substring(height_spr_a, height_spr_b - height_spr_a);
             System.Console.WriteLine("Height: {0}", height_spr);
 
-            if (Convert.ToInt32(index) > -1)
+            /*if (Convert.ToInt32(index) > -1)
             {
                 for (int v = Convert.ToInt32(index); v > -1; v--)
                 {
@@ -1896,7 +1896,7 @@ namespace Gamemaker_Recompiler_Visual
             else
             {
                 Sprites.Create_Sprite(Convert.ToInt32(x), Convert.ToInt32(y), Convert.ToInt32(width_spr), Convert.ToInt32(height_spr), path.Remove(path.Length - "sprites\\".Length), name + ".png", Convert.ToInt32(tex));
-            }
+            }*/
 
 
             // REWRITE
