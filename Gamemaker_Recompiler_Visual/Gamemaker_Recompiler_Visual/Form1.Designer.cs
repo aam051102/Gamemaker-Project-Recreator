@@ -52,7 +52,7 @@
             this.btn_Sprites.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Black;
             this.btn_Sprites.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Black;
             this.btn_Sprites.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn_Sprites.Font = new System.Drawing.Font("Arial Narrow", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_Sprites.Font = new System.Drawing.Font("Century", 20.25F);
             this.btn_Sprites.ForeColor = System.Drawing.SystemColors.ButtonFace;
             this.btn_Sprites.Location = new System.Drawing.Point(433, 391);
             this.btn_Sprites.Name = "btn_Sprites";
@@ -73,9 +73,9 @@
             this.btn_Rooms.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Black;
             this.btn_Rooms.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Black;
             this.btn_Rooms.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn_Rooms.Font = new System.Drawing.Font("Arial Narrow", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_Rooms.Font = new System.Drawing.Font("Century", 20.25F);
             this.btn_Rooms.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.btn_Rooms.Location = new System.Drawing.Point(433, 232);
+            this.btn_Rooms.Location = new System.Drawing.Point(433, 231);
             this.btn_Rooms.Name = "btn_Rooms";
             this.btn_Rooms.Size = new System.Drawing.Size(379, 47);
             this.btn_Rooms.TabIndex = 1;
@@ -94,7 +94,7 @@
             this.btn_Backgrounds.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Black;
             this.btn_Backgrounds.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Black;
             this.btn_Backgrounds.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn_Backgrounds.Font = new System.Drawing.Font("Arial Narrow", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_Backgrounds.Font = new System.Drawing.Font("Century", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_Backgrounds.ForeColor = System.Drawing.SystemColors.ButtonFace;
             this.btn_Backgrounds.Location = new System.Drawing.Point(433, 75);
             this.btn_Backgrounds.Name = "btn_Backgrounds";
@@ -115,9 +115,9 @@
             this.btn_Objects.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Black;
             this.btn_Objects.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Black;
             this.btn_Objects.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn_Objects.Font = new System.Drawing.Font("Arial Narrow", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_Objects.Font = new System.Drawing.Font("Century", 20.25F);
             this.btn_Objects.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.btn_Objects.Location = new System.Drawing.Point(433, 179);
+            this.btn_Objects.Location = new System.Drawing.Point(433, 178);
             this.btn_Objects.Name = "btn_Objects";
             this.btn_Objects.Size = new System.Drawing.Size(379, 47);
             this.btn_Objects.TabIndex = 3;
@@ -136,9 +136,9 @@
             this.btn_Scripts.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Black;
             this.btn_Scripts.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Black;
             this.btn_Scripts.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn_Scripts.Font = new System.Drawing.Font("Arial Narrow", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_Scripts.Font = new System.Drawing.Font("Century", 20.25F);
             this.btn_Scripts.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.btn_Scripts.Location = new System.Drawing.Point(433, 285);
+            this.btn_Scripts.Location = new System.Drawing.Point(433, 284);
             this.btn_Scripts.Name = "btn_Scripts";
             this.btn_Scripts.Size = new System.Drawing.Size(379, 47);
             this.btn_Scripts.TabIndex = 4;
@@ -157,7 +157,7 @@
             this.btn_Sounds.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Black;
             this.btn_Sounds.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Black;
             this.btn_Sounds.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn_Sounds.Font = new System.Drawing.Font("Arial Narrow", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_Sounds.Font = new System.Drawing.Font("Century", 20.25F);
             this.btn_Sounds.ForeColor = System.Drawing.SystemColors.ButtonFace;
             this.btn_Sounds.Location = new System.Drawing.Point(433, 338);
             this.btn_Sounds.Name = "btn_Sounds";
@@ -178,9 +178,9 @@
             this.btn_Fonts.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Black;
             this.btn_Fonts.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Black;
             this.btn_Fonts.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn_Fonts.Font = new System.Drawing.Font("Arial Narrow", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_Fonts.Font = new System.Drawing.Font("Century", 20.25F);
             this.btn_Fonts.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.btn_Fonts.Location = new System.Drawing.Point(433, 128);
+            this.btn_Fonts.Location = new System.Drawing.Point(433, 125);
             this.btn_Fonts.Name = "btn_Fonts";
             this.btn_Fonts.Size = new System.Drawing.Size(379, 47);
             this.btn_Fonts.TabIndex = 6;
@@ -195,11 +195,11 @@
             // lbl_Title
             // 
             this.lbl_Title.AutoSize = true;
-            this.lbl_Title.Font = new System.Drawing.Font("Arial Narrow", 39.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_Title.Font = new System.Drawing.Font("Century", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbl_Title.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.lbl_Title.Location = new System.Drawing.Point(100, 9);
+            this.lbl_Title.Location = new System.Drawing.Point(62, 9);
             this.lbl_Title.Name = "lbl_Title";
-            this.lbl_Title.Size = new System.Drawing.Size(613, 63);
+            this.lbl_Title.Size = new System.Drawing.Size(696, 57);
             this.lbl_Title.TabIndex = 7;
             this.lbl_Title.Text = "Gamemaker Project Recreator";
             // 
@@ -221,11 +221,11 @@
             // lbl_Configure_Warning
             // 
             this.lbl_Configure_Warning.AutoSize = true;
-            this.lbl_Configure_Warning.Font = new System.Drawing.Font("Arial Narrow", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_Configure_Warning.Font = new System.Drawing.Font("Century", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbl_Configure_Warning.ForeColor = System.Drawing.Color.Red;
-            this.lbl_Configure_Warning.Location = new System.Drawing.Point(88, 507);
+            this.lbl_Configure_Warning.Location = new System.Drawing.Point(66, 532);
             this.lbl_Configure_Warning.Name = "lbl_Configure_Warning";
-            this.lbl_Configure_Warning.Size = new System.Drawing.Size(644, 31);
+            this.lbl_Configure_Warning.Size = new System.Drawing.Size(660, 25);
             this.lbl_Configure_Warning.TabIndex = 9;
             this.lbl_Configure_Warning.Text = "Please note that you may need to configure a few things in-editor.";
             // 
@@ -237,9 +237,9 @@
             this.btn_Images.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Black;
             this.btn_Images.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Black;
             this.btn_Images.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn_Images.Font = new System.Drawing.Font("Arial Narrow", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_Images.Font = new System.Drawing.Font("Century", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_Images.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.btn_Images.Location = new System.Drawing.Point(12, 128);
+            this.btn_Images.Location = new System.Drawing.Point(12, 125);
             this.btn_Images.Name = "btn_Images";
             this.btn_Images.Size = new System.Drawing.Size(379, 47);
             this.btn_Images.TabIndex = 10;
@@ -259,7 +259,7 @@
             this.btn_Images2.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Black;
             this.btn_Images2.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Black;
             this.btn_Images2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn_Images2.Font = new System.Drawing.Font("Arial Narrow", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_Images2.Font = new System.Drawing.Font("Century", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_Images2.ForeColor = System.Drawing.SystemColors.ButtonFace;
             this.btn_Images2.Location = new System.Drawing.Point(12, 75);
             this.btn_Images2.Name = "btn_Images2";
@@ -281,9 +281,9 @@
             this.btn_Images3.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Black;
             this.btn_Images3.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Black;
             this.btn_Images3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn_Images3.Font = new System.Drawing.Font("Arial Narrow", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_Images3.Font = new System.Drawing.Font("Century", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_Images3.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.btn_Images3.Location = new System.Drawing.Point(12, 178);
+            this.btn_Images3.Location = new System.Drawing.Point(12, 177);
             this.btn_Images3.Name = "btn_Images3";
             this.btn_Images3.Size = new System.Drawing.Size(379, 48);
             this.btn_Images3.TabIndex = 12;

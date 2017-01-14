@@ -194,9 +194,11 @@ namespace Gamemaker_Recompiler_Visual
                     instance_cc_a = file_room_instance[n].IndexOf("<Room_Code>") + "<Room_Code>".Length;
                     instance_cc_b = file_room_instance[n].IndexOf("</Room_Code>");
                     //MessageBox.Show(Convert.ToString(instance_cc_b));
-                    if (instance_cc_b != -1) {
+                    if (instance_cc_b != -1)
+                    {
                         instance_cc[n] = file_room_instance[n].Substring(instance_cc_a, instance_cc_b - instance_cc_a);
-                    } else
+                    }
+                    else
                     {
                         instance_cc[n] = "";
                     }
@@ -219,9 +221,11 @@ namespace Gamemaker_Recompiler_Visual
             // ROOM CREATION CODE 
             string creation_code = "";
 
-            if (System.IO.File.Exists(path.Remove(path.Length - path.LastIndexOf("\\") - 1) + "code\\" + "gml_Room_" + name + ".js")) {
+            if (System.IO.File.Exists(path.Remove(path.Length - path.LastIndexOf("\\") - 1) + "code\\" + "gml_Room_" + name + ".js"))
+            {
                 creation_code = System.IO.File.ReadAllText(@path.Remove(path.Length - path.LastIndexOf("\\") - 1) + "code\\" + "gml_Room_" + name + ".js");
-            } else
+            }
+            else
             {
                 //MessageBox.Show(path.Remove(path.Length - path.LastIndexOf("\\") - 1) + "code\\" + "gml_Room_" + name + ".js");
             }
@@ -409,19 +413,19 @@ namespace Gamemaker_Recompiler_Visual
             //MessageBox.Show("RAN");
 
             // TILE DATA
-            List<string> tile_file = new List<string> {  };
-            List<int> tile_index = new List<int> {  };
-            List<int> tile_x = new List<int> {  };
-            List<int> tile_y = new List<int> {  };
-            List<int> tile_back_index = new List<int> {  };
-            List<int> tile_offset_x = new List<int> {  };
-            List<int> tile_offset_y = new List<int> {  };
-            List<int> tile_width = new List<int> {  };
-            List<int> tile_height = new List<int> {  };
-            List<int> tile_depth = new List<int> {  };
-            List<int> tile_id = new List<int> {  };
-            List<int> tile_xscale = new List<int> {  };
-            List<int> tile_yscale = new List<int> {  };
+            List<string> tile_file = new List<string> { };
+            List<int> tile_index = new List<int> { };
+            List<int> tile_x = new List<int> { };
+            List<int> tile_y = new List<int> { };
+            List<int> tile_back_index = new List<int> { };
+            List<int> tile_offset_x = new List<int> { };
+            List<int> tile_offset_y = new List<int> { };
+            List<int> tile_width = new List<int> { };
+            List<int> tile_height = new List<int> { };
+            List<int> tile_depth = new List<int> { };
+            List<int> tile_id = new List<int> { };
+            List<int> tile_xscale = new List<int> { };
+            List<int> tile_yscale = new List<int> { };
             //List<int> tile_blend = new List<int> { 0 };
 
             for (var n = 0; n < tile_last_index; n++)
@@ -528,7 +532,15 @@ namespace Gamemaker_Recompiler_Visual
             rewrite += "    <isometric>" + "0" + "</isometric>@";
             rewrite += "    <speed>" + speed + "</speed>@";
             rewrite += "    <persistent>" + persistent + "</persistent>@";
-            rewrite += "    <colour>" + color + "</colour>@";
+            //MessageBox.Show(name + "\n" + "#" + color.Replace("=", ""));
+
+            /*string part1 = Convert.ToString(HexToInt(Convert.ToChar(color.Substring(0, 1))));
+            string part2 = Convert.ToString(HexToInt(Convert.ToChar(color.Substring(1, 1))));
+            string part3 = Convert.ToString(HexToInt(Convert.ToChar(color.Substring(2, 1))));
+            string part4 = Convert.ToString(HexToInt(Convert.ToChar(color.Substring(3, 1))));
+            string part5 = Convert.ToString(HexToInt(Convert.ToChar(color.Substring(4, 1))));
+            string part6 = Convert.ToString(HexToInt(Convert.ToChar(color.Substring(5, 1))));*/
+            rewrite += "    <colour>" + "0" + /*part1 + part2 + part3 + part4 + part5 + part6 + */"</colour>@";
             rewrite += "    <showcolour>" + show_color + "</showcolour>@";
             rewrite += "    <code>" + creation_code + "</code>@";
             rewrite += "    <enableViews>" + Convert.ToInt32(Convert.ToBoolean(enable_views)) + "</enableViews>@";
@@ -571,7 +583,7 @@ namespace Gamemaker_Recompiler_Visual
             {
                 for (var n = 0; n < Convert.ToInt32(view_index_area) + 1; n++)
                 {
-                    rewrite += "        <view visible=\"" + Convert.ToInt32(Convert.ToBoolean(view_visible[n])) + "\" objName=\"" + "&alt;undefined&gt;" + "\" xview=\"" + view_x[n] + "\" yview=\"" + view_y[n] + "\" wview=\"" + view_width[n] + "\" hview=\"" + view_height[n] + "\" xport=\"" + view_port_x[n] + "\" yport=\"" + view_port_y[n] + "\" wport=\"" + view_port_width[n] + "\" hport=\"" + view_port_height[n] + "\" hborder=\"" + view_border_x[n] + "\" vborder=\"" + view_border_y[n] + "\" hspeed=\"" + view_speed_x[n] + "\" vspeed=\"" + view_speed_y[n] + "\"/>@";
+                    rewrite += "        <view visible=\"" + Convert.ToInt32(Convert.ToBoolean(view_visible[n])) + "\" objName=\"" + "" + "\" xview=\"" + view_x[n] + "\" yview=\"" + view_y[n] + "\" wview=\"" + view_width[n] + "\" hview=\"" + view_height[n] + "\" xport=\"" + view_port_x[n] + "\" yport=\"" + view_port_y[n] + "\" wport=\"" + view_port_width[n] + "\" hport=\"" + view_port_height[n] + "\" hborder=\"" + view_border_x[n] + "\" vborder=\"" + view_border_y[n] + "\" hspeed=\"" + view_speed_x[n] + "\" vspeed=\"" + view_speed_y[n] + "\"/>@";
                 }
             }
             for (var n = 0; n < 8 - (Convert.ToInt32(view_index_area) + 1); n++)
@@ -586,12 +598,16 @@ namespace Gamemaker_Recompiler_Visual
             rewrite += "    </views>@";
             rewrite += "    <instances>@";
 
-            if (Convert.ToInt32(object_indexes) != -1) {
+            if (Convert.ToInt32(object_indexes) != -1)
+            {
                 for (int i = 0; i < Convert.ToInt32(object_indexes) + 1; i++)
                 {
-                    if (instance_cc[i] != "") {
+                    if (instance_cc[i] != "")
+                    {
                         rewrite += "        <instance objName=\"" + instance_name[i] + "\" x=\"" + instance_x[i] + "\" y=\"" + instance_y[i] + "\" name=\"" + "inst_" + instance_id[i] + "\" locked=\"" + "0" + "\" code=\"" + instance_cc[i] + "\" scaleX=\"" + instance_xscale[i] + "\" scaleY=\"" + instance_yscale[i] + "\" colour=\"" + "4294967295" + "\" rotation=\"" + instance_rot[i] + "\"/>@";
-                    } else {
+                    }
+                    else
+                    {
                         rewrite += "        <instance objName=\"" + instance_name[i] + "\" x=\"" + instance_x[i] + "\" y=\"" + instance_y[i] + "\" name=\"" + "inst_" + instance_id[i] + "\" locked=\"" + "0" + "\" code=\"" + "" + "\" scaleX=\"" + instance_xscale[i] + "\" scaleY=\"" + instance_yscale[i] + "\" colour=\"" + "4294967295" + "\" rotation=\"" + instance_rot[i] + "\"/>@";
                     }
                 }
@@ -606,8 +622,9 @@ namespace Gamemaker_Recompiler_Visual
             {
                 rewrite += "    <tiles>@";
 
-                for (var n = 0; n < tile_last_index; n++) {
-                    rewrite += "        <tile bgName=\"" + tile_back_index[n] + "\" x=\"" + tile_x[n] + "\" y=\"" + tile_y[n] + "\" w=\"" + tile_width[n] + "\" h=\"" + tile_height[n] + "\" xo=\"" + tile_offset_x[n] + "\" yo=\"" + tile_offset_y[n] + "\" id=\"" + tile_id[n] + "\" name=\"" + "inst_" + tile_id[n]+n + "\" depth=\"" + tile_depth[n] + "\" locked=\"" + "0" + "\" colour=\"" + "4294967295" + "\" scaleX=\"" + tile_xscale[n] + "\" scaleY=\"" + tile_yscale[n] + "\"/>@";
+                for (var n = 0; n < tile_last_index; n++)
+                {
+                    rewrite += "        <tile bgName=\"" + tile_back_index[n] + "\" x=\"" + tile_x[n] + "\" y=\"" + tile_y[n] + "\" w=\"" + tile_width[n] + "\" h=\"" + tile_height[n] + "\" xo=\"" + tile_offset_x[n] + "\" yo=\"" + tile_offset_y[n] + "\" id=\"" + tile_id[n] + "\" name=\"" + "inst_" + tile_id[n] + n + "\" depth=\"" + tile_depth[n] + "\" locked=\"" + "0" + "\" colour=\"" + "4294967295" + "\" scaleX=\"" + tile_xscale[n] + "\" scaleY=\"" + tile_yscale[n] + "\"/>@";
                 }
 
                 rewrite += "    </tiles>@";
@@ -635,6 +652,15 @@ namespace Gamemaker_Recompiler_Visual
                 "\n has been output to file " + name + ".room.gmx" + ", path " + path + "converted");
         }
 
+        public static int HexToInt(char hexChar)
+        {
+            hexChar = char.ToUpper(hexChar);  // may not be necessary
+
+            return (int)hexChar < (int)'A' ?
+                ((int)hexChar - (int)'0') :
+                10 + ((int)hexChar - (int)'A');
+        }
+
         public static string[] Get_Files(string path)
         {
             string[] files = Directory.GetFiles(path);
@@ -647,7 +673,7 @@ namespace Gamemaker_Recompiler_Visual
     {
         public static void Convert_Objects_From_Path(string path)
         {
-            string[] objects = Scripts.Get_Files(path);
+            string[] objects = Objects.Get_Files(path);
             foreach (string Object in objects)
             {
                 if (Path.GetExtension(Path.GetFileName(Object)) == ".js")
@@ -765,9 +791,29 @@ namespace Gamemaker_Recompiler_Visual
                 List<string> code_event_name = new List<string> { "" };
                 List<int> code_enumb = new List<int> { 0 };
 
+                string[,] code_event_actions = new string[1000, 1000];
+                int code_event_action_index = 0;
+                string code_event_action_list = text;
+                string[] code_event_action = new string[1000];
+                string[,] code_event_action_code = new string[1000, 1000];
+
+                code_list = code_list.Replace("self.", "");
+
                 while (code_list.IndexOf("Event: ") != -1)
                 {
+                    code_event_action_index = 0;
                     code_index += 1;
+                    code_event_actions[code_index, 0] = Convert.ToString(Convert.ToInt32(code_event_actions[code_index, 0]) + 1);
+
+                    /*while (code_event_action_list.IndexOf("action_") != -1)
+                    {
+                        code_event_action_index += 1;
+                        code_event_actions[code_index, 0] = Convert.ToString(Convert.ToInt32(code_event_actions[code_index, 0]) + 1);
+                        MessageBox.Show(Convert.ToString(code_event_action_list.IndexOf(")")));
+                        code_event_actions[code_index, code_event_action_index] = Convert.ToString(code_event_action_list.Remove(0, code_event_action_list.IndexOf("action_")).Substring(0, code_event_action_list.IndexOf(")")));
+                        code_event_action_list = code_event_action_list.Remove(code_event_action_list.IndexOf("action_"), "action_".Length);
+                        MessageBox.Show(code_event_actions[code_index, code_event_action_index]);
+                    }*/
 
                     int code_event_name_a = code_list.IndexOf("Event: ") + "Event: ".Length;
                     int code_event_name_b = code_list.Remove(0, code_event_name_a).IndexOf(System.Environment.NewLine) + code_event_name_a;
@@ -775,19 +821,108 @@ namespace Gamemaker_Recompiler_Visual
 
                     if (code_event_name[code_index].IndexOf("[") != -1)
                     {
-                        code.Add(code_path + CultureInfo.CurrentCulture.TextInfo.ToTitleCase(code_event_name[code_index].Remove(0, 2)).Substring(0, code_event_name[code_index].IndexOf("[") - (code_event_name[code_index].IndexOf("]") - code_event_name[code_index].IndexOf("["))) + "_" + code_event_name[code_index].Substring(code_event_name[code_index].IndexOf("[") + 1, code_event_name[code_index].IndexOf("]") - (code_event_name[code_index].IndexOf("[") + 1)) + ".js");
+                        if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(code_event_name[code_index].Remove(0, 2)).Substring(0, code_event_name[code_index].IndexOf("[") - (code_event_name[code_index].IndexOf("]") - code_event_name[code_index].IndexOf("["))) == "Keypress")
+                        {
+                            code.Add(code_path + "KeyPress" + "_" + code_event_name[code_index].Substring(code_event_name[code_index].IndexOf("[") + 1, code_event_name[code_index].IndexOf("]") - (code_event_name[code_index].IndexOf("[") + 1)) + ".js");
+                        }
+                        else if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(code_event_name[code_index].Remove(0, 2)).Substring(0, code_event_name[code_index].IndexOf("[") - (code_event_name[code_index].IndexOf("]") - code_event_name[code_index].IndexOf("["))) == "Keyrelease")
+                        {
+                            code.Add(code_path + "KeyRelease" + "_" + code_event_name[code_index].Substring(code_event_name[code_index].IndexOf("[") + 1, code_event_name[code_index].IndexOf("]") - (code_event_name[code_index].IndexOf("[") + 1)) + ".js");
+                        }
+                        else if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(code_event_name[code_index].Remove(0, 2)).Substring(0, code_event_name[code_index].IndexOf("[") - (code_event_name[code_index].IndexOf("]") - code_event_name[code_index].IndexOf("["))) == "Collisi")
+                        {
+                            code.Add(code_path + "Collision" + "_" + code_event_name[code_index].Substring(code_event_name[code_index].IndexOf("[") + 1, code_event_name[code_index].IndexOf("]") - (code_event_name[code_index].IndexOf("[") + 1)) + ".js");
+                        }
+                        else
+                        {
+                            code.Add(code_path + CultureInfo.CurrentCulture.TextInfo.ToTitleCase(code_event_name[code_index].Remove(0, 2)).Substring(0, code_event_name[code_index].IndexOf("[") - (code_event_name[code_index].IndexOf("]") - code_event_name[code_index].IndexOf("["))) + "_" + code_event_name[code_index].Substring(code_event_name[code_index].IndexOf("[") + 1, code_event_name[code_index].IndexOf("]") - (code_event_name[code_index].IndexOf("[") + 1)) + ".js");
+                        }
+
                     }
                     else
                     {
-                        code.Add(code_path + CultureInfo.CurrentCulture.TextInfo.ToTitleCase(code_event_name[code_index].Remove(0, 2)) + "_" + "0" + ".js");
+                        if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(code_event_name[code_index].Remove(0, 2)) == "Step_Normal")
+                        {
+                            code.Add(code_path + "Step" + "_" + "0" + ".js");
+                        }
+                        else if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(code_event_name[code_index].Remove(0, 2)) == "Step_Begin")
+                        {
+                            code.Add(code_path + "Step" + "_" + "1" + ".js");
+                        }
+                        else if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(code_event_name[code_index].Remove(0, 2)) == "Step_End")
+                        {
+                            code.Add(code_path + "Step" + "_" + "2" + ".js");
+                        }
+                        
+                        else {
+                            code.Add(code_path + CultureInfo.CurrentCulture.TextInfo.ToTitleCase(code_event_name[code_index].Remove(0, 2)) + "_" + "0" + ".js");
+                        }
                     }
 
-                    // CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Text)
+                    //CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Text)
 
                     //MessageBox.Show(code[code_index]);
 
-                    code_list = code_list.Remove(code_list.IndexOf("Event: "), "Event: ".Length);
+                    code_list = code_list.Remove(0, code_list.IndexOf("Event: "));
+
+                    if (code_list.IndexOf("Event: ") != -1)
+                    {
+                        code_event_action_list = code_list.Substring(code_list.IndexOf("Event: "), code_list.Length);
+                        for (var i = 1; i < Convert.ToInt32(code_event_actions[code_index, 0]+1); i++)
+                        {
+                            if (code_event_action_list.IndexOf("action_") != -1)
+                            {
+                                MessageBox.Show(code_event_action_list.Substring(code_event_action_list.IndexOf("action_"), code_event_action_list.Remove(0, code_event_action_list.IndexOf("action_")).IndexOf(")") + 1));
+                                MessageBox.Show(code_event_action_list);
+                                /*if (i != Convert.ToInt32(code_event_actions[code_index, 0]))
+                                {*/
+                                    code_event_actions[code_index, i] = code_event_action_list.Substring(code_event_action_list.IndexOf("action_"), code_event_action_list.Remove(0, code_event_action_list.IndexOf("action_")).IndexOf(")") + 1);
+                                    code_event_action_list = code_event_action_list.Remove(code_event_action_list.IndexOf("action_"), code_event_action_list.Remove(0, code_event_action_list.IndexOf("action_")).IndexOf(")") + 1);
+                                /*}
+                                else
+                                {
+                                    code_event_actions[code_index, i] = code_event_action_list.Substring(0, code_event_action_list.Length);
+                                    code_event_action_list = code_event_action_list.Remove(code_event_action_list.IndexOf("action_"), code_event_action_list.Remove(0, code_event_action_list.IndexOf("action_")).IndexOf(")"));
+                                }*/
+                            }
+                        }
+
+                        code_event_action_list = code_list.Substring(code_list.IndexOf("Event: "), code_list.Length);
+                        var code_amount = 0;
+                        while (code_event_action_list.IndexOf("action_") != -1)
+                        {
+                            MessageBox.Show("EVENT ACTION LIST\n" + code_event_action_list);
+                            MessageBox.Show("EVENT ACTION CODE\n" + code_event_action_code[code_index, code_amount]);
+                            MessageBox.Show(code_event_action_list.Remove(0, code_event_action_list.Remove(0, code_event_action_list.IndexOf("action_")).IndexOf(")") + 3));
+                            code_amount += 1;
+                            if (code_event_action_list.Remove(0, code_event_action_list.Remove(0, code_event_action_list.IndexOf("action_")).IndexOf(")") + 3).StartsWith("action_") == false)
+                            {
+                                if (code_event_action_list.IndexOf("Event: ") == -1)
+                                {
+                                    code_event_action_code[code_index, code_amount] = code_event_action_list.Substring(0, code_event_action_list.IndexOf("action_"));
+                                    code_event_action_list = code_event_action_list.Remove(0, code_event_action_list.IndexOf("action_"));
+                                }
+                                else
+                                {
+                                    code_event_action_code[code_index, code_amount] = code_event_action_list.Substring(0, code_event_action_list.IndexOf("Event: "));
+                                    code_event_action_list = code_event_action_list.Remove(0, code_event_action_list.IndexOf("Event: "));
+                                }
+                            }
+                            code_event_action_list = code_event_action_list.Remove(0, code_event_action_list.Remove(0, code_event_action_list.IndexOf("action_")).IndexOf(")") + 1);
+                        }
+                        if (code_event_action_list.Length != 0)
+                        {
+                            code_event_action_code[code_index, code_amount + 1] = code_event_action_list.Substring(0, code_event_action_list.Length);
+                        }
+
+                        code_list = code_list.Remove(0, code_list.IndexOf("Event: ") + "Event: ".Length);
+                    }/* else
+                    {
+                        code_event_action_list = code_list.Substring(0, code_list.Length);
+                    }*/
                 }
+                
+
 
 
 
@@ -811,14 +946,146 @@ namespace Gamemaker_Recompiler_Visual
                     {
                         if (code_event_name[n].IndexOf("[") != -1)
                         {
-                            rewrite += "        <event eventtype=\"" + Event_To_Number(code_event_name[n]) + "\" enumb=\"" + code_event_name[n].Substring(code_event_name[n].IndexOf("[") + 1, code_event_name[n].IndexOf("]") - (code_event_name[n].IndexOf("[") + 1)) + "\">@";
+                            if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(code_event_name[n].Remove(0, 2)).Substring(0, code_event_name[n].IndexOf("[") - (code_event_name[n].IndexOf("]") - code_event_name[n].IndexOf("["))) == "_Outside")
+                            {
+                                rewrite += "        <event eventtype=\"" + Event_To_Number("___Other") + "\" enumb=\"" + "0" + "\">@";
+                            }
+                            else {
+                                rewrite += "        <event eventtype=\"" + Event_To_Number(code_event_name[n]) + "\" enumb=\"" + code_event_name[n].Substring(code_event_name[n].IndexOf("[") + 1, code_event_name[n].IndexOf("]") - (code_event_name[n].IndexOf("[") + 1)) + "\">@";
+                            }
                         }
                         else
                         {
-                            rewrite += "        <event eventtype=\"" + Event_To_Number(code_event_name[n]) + "\" enumb=\"" + "0" + "\">@";
+                            // STEP
+                            if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(code_event_name[n].Remove(0, 2)) == "_Step_Normal")
+                            {
+                                rewrite += "        <event eventtype=\"" + Event_To_Number("___Step") + "\" enumb=\"" + "0" + "\">@";
+                            }
+                            else if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(code_event_name[n].Remove(0, 2)) == "_Step_Begin")
+                            {
+                                rewrite += "        <event eventtype=\"" + Event_To_Number("___Step") + "\" enumb=\"" + "1" + "\">@";
+                            }
+                            else if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(code_event_name[n].Remove(0, 2)) == "_Step_End")
+                            {
+                                rewrite += "        <event eventtype=\"" + Event_To_Number("___Step") + "\" enumb=\"" + "2" + "\">@";
+                            }
+                            // OTHER
+                            else if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(code_event_name[n].Remove(0, 2)) == "_Outside")
+                            {
+                                rewrite += "        <event eventtype=\"" + Event_To_Number("___Other") + "\" enumb=\"" + "0" + "\">@";
+                            }
+                            else if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(code_event_name[n].Remove(0, 2)) == "_User0")
+                            {
+                                rewrite += "        <event eventtype=\"" + Event_To_Number("___Other") + "\" enumb=\"" + "10" + "\">@";
+                            }
+                            else if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(code_event_name[n].Remove(0, 2)) == "_User1")
+                            {
+                                rewrite += "        <event eventtype=\"" + Event_To_Number("___Other") + "\" enumb=\"" + "11" + "\">@";
+                            }
+                            else if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(code_event_name[n].Remove(0, 2)) == "_User2")
+                            {
+                                rewrite += "        <event eventtype=\"" + Event_To_Number("___Other") + "\" enumb=\"" + "12" + "\">@";
+                            }
+                            else if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(code_event_name[n].Remove(0, 2)) == "_User3")
+                            {
+                                rewrite += "        <event eventtype=\"" + Event_To_Number("___Other") + "\" enumb=\"" + "13" + "\">@";
+                            }
+                            else if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(code_event_name[n].Remove(0, 2)) == "_User4")
+                            {
+                                rewrite += "        <event eventtype=\"" + Event_To_Number("___Other") + "\" enumb=\"" + "14" + "\">@";
+                            }
+                            else if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(code_event_name[n].Remove(0, 2)) == "_User5")
+                            {
+                                rewrite += "        <event eventtype=\"" + Event_To_Number("___Other") + "\" enumb=\"" + "15" + "\">@";
+                            }
+                            else if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(code_event_name[n].Remove(0, 2)) == "_User6")
+                            {
+                                rewrite += "        <event eventtype=\"" + Event_To_Number("___Other") + "\" enumb=\"" + "16" + "\">@";
+                            }
+                            else if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(code_event_name[n].Remove(0, 2)) == "_User7")
+                            {
+                                rewrite += "        <event eventtype=\"" + Event_To_Number("___Other") + "\" enumb=\"" + "17" + "\">@";
+                            }
+                            else if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(code_event_name[n].Remove(0, 2)) == "_User8")
+                            {
+                                rewrite += "        <event eventtype=\"" + Event_To_Number("___Other") + "\" enumb=\"" + "18" + "\">@";
+                            }
+                            else if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(code_event_name[n].Remove(0, 2)) == "_User9")
+                            {
+                                rewrite += "        <event eventtype=\"" + Event_To_Number("___Other") + "\" enumb=\"" + "19" + "\">@";
+                            }
+                            else if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(code_event_name[n].Remove(0, 2)) == "_User10")
+                            {
+                                rewrite += "        <event eventtype=\"" + Event_To_Number("___Other") + "\" enumb=\"" + "20" + "\">@";
+                            }
+                            else if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(code_event_name[n].Remove(0, 2)) == "_User11")
+                            {
+                                rewrite += "        <event eventtype=\"" + Event_To_Number("___Other") + "\" enumb=\"" + "21" + "\">@";
+                            }
+                            else if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(code_event_name[n].Remove(0, 2)) == "_User12")
+                            {
+                                rewrite += "        <event eventtype=\"" + Event_To_Number("___Other") + "\" enumb=\"" + "22" + "\">@";
+                            }
+                            else if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(code_event_name[n].Remove(0, 2)) == "_User13")
+                            {
+                                rewrite += "        <event eventtype=\"" + Event_To_Number("___Other") + "\" enumb=\"" + "23" + "\">@";
+                            }
+                            else if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(code_event_name[n].Remove(0, 2)) == "_User14")
+                            {
+                                rewrite += "        <event eventtype=\"" + Event_To_Number("___Other") + "\" enumb=\"" + "24" + "\">@";
+                            }
+                            else if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(code_event_name[n].Remove(0, 2)) == "_User15")
+                            {
+                                rewrite += "        <event eventtype=\"" + Event_To_Number("___Other") + "\" enumb=\"" + "25" + "\">@";
+                            }
+                            // MOUSE
+                            else if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(code_event_name[n].Remove(0, 2)) == "_Mouse_Left_Button")
+                            {
+                                rewrite += "        <event eventtype=\"" + Event_To_Number("___Mouse") + "\" enumb=\"" + "0" + "\">@";
+                            }
+                            else if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(code_event_name[n].Remove(0, 2)) == "_Mouse_Right_Button")
+                            {
+                                rewrite += "        <event eventtype=\"" + Event_To_Number("___Mouse") + "\" enumb=\"" + "1" + "\">@";
+                            }
+                            else if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(code_event_name[n].Remove(0, 2)) == "_Mouse_Middle_Button")
+                            {
+                                rewrite += "        <event eventtype=\"" + Event_To_Number("___Mouse") + "\" enumb=\"" + "2" + "\">@";
+                            }
+                            else {
+                                rewrite += "        <event eventtype=\"" + Event_To_Number(code_event_name[n]) + "\" enumb=\"" + "0" + "\">@";
+                            }
+                            //MessageBox.Show(CultureInfo.CurrentCulture.TextInfo.ToTitleCase(code_event_name[n].Remove(0, 2)));
                         }
 
+                        for(var i = 0; i < code_event_action_index; i++)
+                        {
+                            
+                            rewrite += "            <action>@";
 
+                            rewrite += "                <libid>" + "" + "</libid>@";
+                            rewrite += "                <id>" + "" + "</id>@";
+                            rewrite += "                <kind>" + "" + "</kind>@";
+                            rewrite += "                <userelative>" + "" + "</userelative>@";
+                            rewrite += "                <isquestion>" + "" + "</isquestion>@";
+                            rewrite += "                <useapplyto>" + "" + "</useapplyto>@";
+                            rewrite += "                <exetype>" + "" + "</exetype>@";
+                            rewrite += "                <functionname>" + "" + "</functionname>@";
+                            rewrite += "                <codestring>" + "" + "</codestring>@";
+                            rewrite += "                <whoName>" + "" + "</whoName>@";
+                            rewrite += "                <relative>" + "" + "</relative>@";
+                            rewrite += "                <isnot>" + "" + "</isnot>@";
+                            rewrite += "                <arguments>@";
+
+                            rewrite += "                    <argument>@";
+
+                            rewrite += "                        <kind>" + "" + "</kind>@";
+                            rewrite += "                        <string>" + "" + "</string>@";
+
+                            rewrite += "                    </argument>@";
+
+                            rewrite += "                </arguments>@";
+                            rewrite += "            </action>@";
+                        }
 
                         rewrite += "        </event>@";
                     }
@@ -860,20 +1127,142 @@ namespace Gamemaker_Recompiler_Visual
         }
 
         public static int Event_To_Number(string Event) {
-            var Number = 0;
+            var Number = -1;
 
             if (Event.IndexOf("[") != -1) {
-                if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Event.Remove(0, 2)).Substring(0, Event.IndexOf("[") - (Event.IndexOf("]") - Event.IndexOf("["))) == "Create")
+                if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Event.Remove(0, 2)).Substring(0, Event.IndexOf("[") - (Event.IndexOf("]") - Event.IndexOf("["))) == "_Create")
                 {
                     Number = 0;
                 }
+                else if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Event.Remove(0, 2)).Substring(0, Event.IndexOf("[") - (Event.IndexOf("]") - Event.IndexOf("["))) == "_Destroy")
+                {
+                    Number = 1;
+                }
+                else if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Event.Remove(0, 2)).Substring(0, Event.IndexOf("[") - (Event.IndexOf("]") - Event.IndexOf("["))) == "_Alarm")
+                {
+                    Number = 2;
+                }
+                else if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Event.Remove(0, 2)).Substring(0, Event.IndexOf("[") - (Event.IndexOf("]") - Event.IndexOf("["))) == "_Step_normal")
+                {
+                    Number = 3;
+                }
+                else if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Event.Remove(0, 2)).Substring(0, Event.IndexOf("[") - (Event.IndexOf("]") - Event.IndexOf("["))) == "_Step")
+                {
+                    Number = 3;
+                }
+                else if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Event.Remove(0, 2)).Substring(0, Event.IndexOf("[") - (Event.IndexOf("]") - Event.IndexOf("["))) == "_Step_begin")
+                {
+                    Number = 3;
+                }
+                else if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Event.Remove(0, 2)).Substring(0, Event.IndexOf("[") - (Event.IndexOf("]") - Event.IndexOf("["))) == "_Step_end")
+                {
+                    Number = 3;
+                }
+                else if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Event.Remove(0, 2)).Substring(0, Event.IndexOf("[") - (Event.IndexOf("]") - Event.IndexOf("["))) == "_Collisi")
+                {
+                    Number = 4;
+                }
+                else if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Event.Remove(0, 2)).Substring(0, Event.IndexOf("[") - (Event.IndexOf("]") - Event.IndexOf("["))) == "_Keyboard")
+                {
+                    Number = 5;
+                }
+                else if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Event.Remove(0, 2)).Substring(0, Event.IndexOf("[") - (Event.IndexOf("]") - Event.IndexOf("["))) == "_Mouse")
+                {
+                    Number = 6;
+                }
+                else if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Event.Remove(0, 2)).Substring(0, Event.IndexOf("[") - (Event.IndexOf("]") - Event.IndexOf("["))) == "_Other")
+                {
+                    Number = 7;
+                }
+                else if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Event.Remove(0, 2)).Substring(0, Event.IndexOf("[") - (Event.IndexOf("]") - Event.IndexOf("["))) == "_Outside")
+                {
+                    Number = 7;
+                }
+                else if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Event.Remove(0, 2)).Substring(0, Event.IndexOf("[") - (Event.IndexOf("]") - Event.IndexOf("["))) == "_Draw")
+                {
+                    Number = 8;
+                }
+
+                else if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Event.Remove(0, 2)).Substring(0, Event.IndexOf("[") - (Event.IndexOf("]") - Event.IndexOf("["))) == "_Keypress")
+                {
+                    Number = 9;
+                }
+                else if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Event.Remove(0, 2)).Substring(0, Event.IndexOf("[") - (Event.IndexOf("]") - Event.IndexOf("["))) == "_Keyrelease")
+                {
+                    Number = 10;
+                }
+                //MessageBox.Show(CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Event.Remove(0, 2)).Substring(0, Event.IndexOf("[") - (Event.IndexOf("]") - Event.IndexOf("["))));
             } else
             {
-                if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Event.Remove(0, 2)) == "Create")
+                if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Event.Remove(0, 2)) == "_Create")
                 {
                     Number = 0;
                 }
+                else if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Event.Remove(0, 2)) == "_Destroy")
+                {
+                    Number = 1;
+                }
+                else if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Event.Remove(0, 2)) == "_Alarm")
+                {
+                    Number = 2;
+                }
+                else if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Event.Remove(0, 2)) == "_Step_Normal")
+                {
+                    Number = 3;
+                }
+                else if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Event.Remove(0, 2)) == "_Step")
+                {
+                    Number = 3;
+                }
+                else if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Event.Remove(0, 2)) == "_Step_Begin")
+                {
+                    Number = 3;
+                }
+                else if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Event.Remove(0, 2)) == "_Step_End")
+                {
+                    Number = 3;
+                }
+                else if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Event.Remove(0, 2)) == "_Collision")
+                {
+                    Number = 4;
+                }
+                else if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Event.Remove(0, 2)) == "_Keyboard")
+                {
+                    Number = 5;
+                }
+                else if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Event.Remove(0, 2)) == "_Mouse")
+                {
+                    Number = 6;
+                }
+                else if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Event.Remove(0, 2)) == "_Other")
+                {
+                    Number = 7;
+                }
+                for (var i = 0; i < 16; i++) {
+                    if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Event.Remove(0, 2)) == "_User" + i)
+                    {
+                        Number = 7;
+                    }
+                }
+                if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Event.Remove(0, 2)) == "_Outside")
+                {
+                    Number = 7;
+                }
+                else if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Event.Remove(0, 2)) == "_Draw")
+                {
+                    Number = 8;
+                }
+                else if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Event.Remove(0, 2)) == "_Keypress")
+                {
+                    Number = 9;
+                }
+                else if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Event.Remove(0, 2)) == "_Keyrelease")
+                {
+                    Number = 10;
+                }
+                //MessageBox.Show(CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Event.Remove(0, 2)));
             }
+            
 
             return Number;
         }
@@ -917,6 +1306,8 @@ namespace Gamemaker_Recompiler_Visual
                 // SCRIPT CODE
                 string script_code = System.IO.File.ReadAllText(@path.Remove(path.Length-path.LastIndexOf("\\")-1) + "code\\" + "gml_Script_" + script_name + ".js");
                 //MessageBox.Show(script_code);
+
+                script_code = script_code.Replace("self.", "");
 
                 // REWRITE
                 string rewrite = "";
@@ -1416,12 +1807,60 @@ namespace Gamemaker_Recompiler_Visual
 
             //System.Console.WriteLine("Contents of WriteText.txt = {0}", text);
 
+
             // GENERAL INFORMATION
             // NAME
             int name_a = text.IndexOf("<name>") + "<name>".Length;
             int name_b = text.IndexOf("</name>");
             string name = text.Substring(name_a, name_b - name_a);
             System.Console.WriteLine("Name: {0}", name);
+
+            // INDEX
+            int index_a = text.IndexOf("<index>") + "<index>".Length;
+            int index_b = text.IndexOf("</index>");
+            string index = text.Substring(index_a, index_b - index_a);
+            System.Console.WriteLine("Index: {0}", index);
+
+            // TILESET INFO
+            int usedAsTileset = 0;
+            int tilesetOffsetX = 0;
+            int tilesetOffsetY = 0;
+            int tilesetSizeX = 0;
+            int tilesetSizeY = 0;
+
+            //MessageBox.Show(path.Replace("backgrounds\\", "") + "rooms\\");
+            string[] rooms = Rooms.Get_Files(path.Replace("backgrounds\\", "") + "rooms\\");
+            foreach (string room in rooms)
+            {
+                if (Path.GetExtension(Path.GetFileName(room)) == ".xml")
+                {
+                    string roomText = System.IO.File.ReadAllText(room);
+                    if (roomText.IndexOf("<Tiles>") != -1)
+                    {
+                        roomText = roomText.Substring(roomText.IndexOf("<Tiles>"), roomText.Length - roomText.IndexOf("<Tiles>"));
+                        if (roomText.IndexOf(index) != -1)
+                        {
+                            if (roomText.Substring(roomText.IndexOf(index)+2, roomText.Length - (roomText.IndexOf(index)+2)).StartsWith("</Background_Index>"))
+                            {
+                                //if (name == "bg_elevleg") MessageBox.Show(roomText.Substring(roomText.IndexOf(index), roomText.Length - roomText.IndexOf(index)));
+                                usedAsTileset = -1;
+                                roomText = roomText.Substring(roomText.IndexOf(index), roomText.Length - roomText.IndexOf(index));
+                                //if (name == "bg_elevleg") MessageBox.Show(roomText);
+
+                                if(Convert.ToInt32(roomText.Substring(roomText.IndexOf("<Offset_X>") + "<Offset_X>".Length, roomText.IndexOf("</Offset_X>") - (roomText.IndexOf("<Offset_X>") + "<Offset_X>".Length))) > tilesetOffsetX) tilesetOffsetX = Convert.ToInt32(roomText.Substring(roomText.IndexOf("<Offset_X>") + "<Offset_X>".Length, roomText.IndexOf("</Offset_X>") - (roomText.IndexOf("<Offset_X>") + "<Offset_X>".Length)));
+                                //if (name == "bg_elevleg") MessageBox.Show(Convert.ToString(tilesetOffsetX));
+                                if (Convert.ToInt32(roomText.Substring(roomText.IndexOf("<Offset_Y>") + "<Offset_Y>".Length, roomText.IndexOf("</Offset_Y>") - (roomText.IndexOf("<Offset_Y>") + "<Offset_Y>".Length))) > tilesetOffsetY) tilesetOffsetY = Convert.ToInt32(roomText.Substring(roomText.IndexOf("<Offset_Y>") + "<Offset_Y>".Length, roomText.IndexOf("</Offset_Y>") - (roomText.IndexOf("<Offset_Y>") + "<Offset_Y>".Length)));
+                                //if (name == "bg_elevleg") MessageBox.Show(Convert.ToString(tilesetOffsetY));
+                                if (Convert.ToInt32(roomText.Substring(roomText.IndexOf("<Width>") + "<Width>".Length, roomText.IndexOf("</Width>") - (roomText.IndexOf("<Width>") + "<Width>".Length))) > tilesetSizeX) tilesetSizeX = Convert.ToInt32(roomText.Substring(roomText.IndexOf("<Width>") + "<Width>".Length, roomText.IndexOf("</Width>") - (roomText.IndexOf("<Width>") + "<Width>".Length)));
+                                if (Convert.ToInt32(roomText.Substring(roomText.IndexOf("<Height>") + "<Height>".Length, roomText.IndexOf("</Height>") - (roomText.IndexOf("<Height>") + "<Height>".Length))) > tilesetSizeY) tilesetSizeY = Convert.ToInt32(roomText.Substring(roomText.IndexOf("<Height>") + "<Height>".Length, roomText.IndexOf("</Height>") - (roomText.IndexOf("<Height>") + "<Height>".Length)));
+
+                                //break;
+                            }
+                        }
+                    }
+                }
+                //if(usedAsTileset == -1) break;
+            }
 
             // HEIGHT
             int height_a = text.IndexOf("<Height>") + "<Height>".Length;
@@ -1458,15 +1897,15 @@ namespace Gamemaker_Recompiler_Visual
             string rewrite = "";
             rewrite += "<!--This Document is generated by GameMaker Project Recreater, if you edit it by hand then you do so at your own risk!-->@";
             rewrite += "<background>@";
-            rewrite += "    <istileset>" + "0" + "</istileset>@";
-            rewrite += "    <tilewidth>" + "0" + "</tilewidth>@";
-            rewrite += "    <tileheight>" + "0" + "</tileheight>@";
+            rewrite += "    <istileset>" + usedAsTileset + "</istileset>@";
+            rewrite += "    <tilewidth>" + tilesetSizeX + "</tilewidth>@";
+            rewrite += "    <tileheight>" + tilesetSizeY + "</tileheight>@";
             rewrite += "    <tilexoff>" + xoff + "</tilexoff>@";
             rewrite += "    <tileyoff>" + yoff + "</tileyoff>@";
             rewrite += "    <tilehsep>" + "0" + "</tilehsep>@";
             rewrite += "    <tilevsep>" + "0" + "</tilevsep>@";
-            rewrite += "    <HTile>" + "-1" + "</HTile>@";
-            rewrite += "    <VTile>" + "-1" + "</VTile>@";
+            rewrite += "    <HTile>" + "0" + "</HTile>@";
+            rewrite += "    <VTile>" + "0" + "</VTile>@";
             rewrite += "    <TextureGroups>@";
 
             rewrite += "        <TextureGroup0>" + tex + "</TextureGroup0>@";
