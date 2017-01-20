@@ -9,5 +9,6 @@ Currently, all features but objects are available.
 
 If the program doesn't respond, no worries, it's just working, if any errors come up, restart it.
 
+Thank you to Colinator27 for helping me out with this project.
 
 PLEASE NOTE THAT YOU MAY NEED TO CONFIGURE A FEW THINGS IN GAMEMAKER STUDIO ITSELF.
