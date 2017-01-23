@@ -416,6 +416,7 @@ namespace Gamemaker_Recompiler_Visual
             // TILE DATA
             List<string> tile_file = new List<string> { };
             List<int> tile_index = new List<int> { };
+            List<string> tile_name = new List<string> { };
             List<int> tile_x = new List<int> { };
             List<int> tile_y = new List<int> { };
             List<int> tile_back_index = new List<int> { };
@@ -517,6 +518,23 @@ namespace Gamemaker_Recompiler_Visual
                     //MessageBox.Show("SCALE Y RAN");
 
                     tile_area = tile_area.Remove(0, tile_area.IndexOf("</File.Room.Tile>") + "</File.Room.Tile>".Length);
+
+                    string[] backgrounds = Rooms.Get_Files(path.Remove(path.IndexOf("rooms")) + "backgrounds");
+                    string back_text = "";
+                    /*MessageBox.Show(Convert.ToString(n));
+                    MessageBox.Show(Convert.ToString(tile_last_index));
+                    MessageBox.Show(Convert.ToString(tile_back_index[n]));*/
+                    foreach (string background in backgrounds)
+                    {
+                        if (Path.GetExtension(Path.GetFileName(background)) == ".xml")
+                        {
+                            back_text = System.IO.File.ReadAllText(background);
+                            if (Convert.ToInt32(back_text.Substring(back_text.IndexOf("<index>") + "<index>".Length, back_text.IndexOf("</index>") - (back_text.IndexOf("<index>") + "<index>".Length))) == Convert.ToInt32(tile_back_index[n]))
+                            {
+                                tile_name.Add(back_text.Substring(back_text.IndexOf("<name>") + "<name>".Length, back_text.IndexOf("</name>") - (back_text.IndexOf("<name>") + "<name>".Length)));
+                            }
+                        }
+                    }
                 }
             }
 
@@ -605,7 +623,7 @@ namespace Gamemaker_Recompiler_Visual
                 {
                     if (instance_cc[i] != "")
                     {
-                        rewrite += "        <instance objName=\"" + instance_name[i] + "\" x=\"" + instance_x[i] + "\" y=\"" + instance_y[i] + "\" name=\"" + "inst_" + instance_id[i] + "\" locked=\"" + "0" + "\" code=\"" + instance_cc[i] + "\" scaleX=\"" + instance_xscale[i] + "\" scaleY=\"" + instance_yscale[i] + "\" colour=\"" + "4294967295" + "\" rotation=\"" + instance_rot[i] + "\"/>@";
+                        rewrite += "        <instance objName=\"" + instance_name[i] + "\" x=\"" + instance_x[i] + "\" y=\"" + instance_y[i] + "\" name=\"" + "inst_" + instance_id[i] + "\" locked=\"" + "0" + "\" code=\"" + instance_cc[i].Replace("\"", "&quot;") + "\" scaleX=\"" + instance_xscale[i] + "\" scaleY=\"" + instance_yscale[i] + "\" colour=\"" + "4294967295" + "\" rotation=\"" + instance_rot[i] + "\"/>@";
                     }
                     else
                     {
@@ -625,7 +643,7 @@ namespace Gamemaker_Recompiler_Visual
 
                 for (var n = 0; n < tile_last_index; n++)
                 {
-                    rewrite += "        <tile bgName=\"" + tile_back_index[n] + "\" x=\"" + tile_x[n] + "\" y=\"" + tile_y[n] + "\" w=\"" + tile_width[n] + "\" h=\"" + tile_height[n] + "\" xo=\"" + tile_offset_x[n] + "\" yo=\"" + tile_offset_y[n] + "\" id=\"" + tile_id[n] + "\" name=\"" + "inst_" + tile_id[n] + n + "\" depth=\"" + tile_depth[n] + "\" locked=\"" + "0" + "\" colour=\"" + "4294967295" + "\" scaleX=\"" + tile_xscale[n] + "\" scaleY=\"" + tile_yscale[n] + "\"/>@";
+                    rewrite += "        <tile bgName=\"" + tile_name[n] + "\" x=\"" + tile_x[n] + "\" y=\"" + tile_y[n] + "\" w=\"" + tile_width[n] + "\" h=\"" + tile_height[n] + "\" xo=\"" + tile_offset_x[n] + "\" yo=\"" + tile_offset_y[n] + "\" id=\"" + tile_id[n] + "\" name=\"" + "inst_" + tile_id[n] + n + "\" depth=\"" + tile_depth[n] + "\" locked=\"" + "0" + "\" colour=\"" + "4294967295" + "\" scaleX=\"" + tile_xscale[n] + "\" scaleY=\"" + tile_yscale[n] + "\"/>@";
                 }
 
                 rewrite += "    </tiles>@";
@@ -1585,7 +1603,6 @@ namespace Gamemaker_Recompiler_Visual
                 if (script_code != "")
                 {
                     script_code = script_code.Remove(0, 4);
-                    
                 }
                 //MessageBox.Show(script_code);
 
