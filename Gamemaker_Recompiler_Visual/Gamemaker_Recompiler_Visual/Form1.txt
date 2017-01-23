@@ -20,9 +20,9 @@ namespace Gamemaker_Recompiler_Visual
         public Form()
         {
             InitializeComponent();
-            //System.Timers.Timer timer = new System.Timers.Timer(1000);
-            //timer.Elapsed += async (sender, e) => await Update_Log();
-            //timer.Start();
+            System.Timers.Timer timer = new System.Timers.Timer(1000);
+            timer.Elapsed += async (sender, e) => await Update_Log();
+            timer.Start();
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -30,7 +30,7 @@ namespace Gamemaker_Recompiler_Visual
 
         }
 
-        /*private async Task<string> Update_Log()
+        private async Task<string> Update_Log()
         {
             rtb_Output.Clear();
             for (var i = 0; i < log_text.Count; i++)
@@ -39,7 +39,7 @@ namespace Gamemaker_Recompiler_Visual
             }
 
             return "";
-        }*/
+        }
 
         // SPRITES
         private void btn_Sprites_Click(object sender, EventArgs e)

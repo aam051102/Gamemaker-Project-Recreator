@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using System.IO;
 using System.Drawing;
 using System.Globalization;
+using System.Text.RegularExpressions;
 
 namespace Gamemaker_Recompiler_Visual
 {
@@ -669,17 +670,508 @@ namespace Gamemaker_Recompiler_Visual
         }
     }
 
+    public class EventDictionary
+    {
+        // the dictionary code is mainly made by WarlockD, at https://github.com/WarlockD/GMdsam/blob/master/GMdsam/Constants.cs
+        public static Dictionary<int, string> OtherEvents = new Dictionary<int, string>(){
+                    { 0, "ev_outside" },
+                    { 1, "ev_boundary" },
+                    { 2, "ev_game_start" },
+                    { 3, "ev_game_end" },
+                    { 4, "ev_room_start" },
+                    { 5, "ev_room_end" },
+                    { 6, "ev_no_more_lives" },
+                    { 7, "ev_animation_end" },
+                    { 8, "ev_end_of_path" },
+                    { 9, "ev_no_more_health" },
+                    { 10, "ev_user0" },
+                    { 11, "ev_user1" },
+                    { 12, "ev_user2" },
+                    { 13, "ev_user3" },
+                    { 14, "ev_user4" },
+                    { 15, "ev_user5" },
+                    { 16, "ev_user6" },
+                    { 17, "ev_user7" },
+                    { 18, "ev_user8" },
+                    { 19, "ev_user9" },
+                    { 20, "ev_user10" },
+                    { 21, "ev_user11" },
+                    { 22, "ev_user12" },
+                    { 23, "ev_user13" },
+                    { 24, "ev_user14" },
+                    { 25, "ev_user15" },
+                    { 30, "ev_close_button" } };
+         public static Dictionary<int, string> MouseEvents = new Dictionary<int, string>() {
+                { 0, "ev_left_button" },
+                { 1, "ev_right_button" },
+                { 2, "ev_middle_button" },
+                { 3, "ev_no_button" },
+                { 4, "ev_left_press" },
+                { 5, "ev_right_press" },
+                { 6, "ev_middle_press" },
+                { 7, "ev_left_release" },
+                { 8, "ev_right_release" },
+                { 9, "ev_middle_release" },
+                { 10, "ev_mouse_enter" },
+                { 11, "ev_mouse_leave" },
+                { 12, "ev_global_press" },
+                { 13, "ev_global_release" },
+                { 16, "ev_joystick1_left" },
+                { 17, "ev_joystick1_right" },
+                { 18, "ev_joystick1_up" },
+                { 19, "ev_joystick1_down" },
+                { 21, "ev_joystick1_button1" },
+                { 22, "ev_joystick1_button2" },
+                { 23, "ev_joystick1_button3" },
+                { 24, "ev_joystick1_button4" },
+                { 25, "ev_joystick1_button5" },
+                { 26, "ev_joystick1_button6" },
+                { 27, "ev_joystick1_button7" },
+                { 28, "ev_joystick1_button8" },
+                { 31, "ev_joystick2_left" },
+                { 32, "ev_joystick2_right" },
+                { 33, "ev_joystick2_up" },
+                { 34, "ev_joystick2_down" },
+                { 36, "ev_joystick2_button1" },
+                { 37, "ev_joystick2_button2" },
+                { 38, "ev_joystick2_button3" },
+                { 39, "ev_joystick2_button4" },
+                { 40, "ev_joystick2_button5" },
+                { 41, "ev_joystick2_button6" },
+                { 42, "ev_joystick2_button7" },
+                { 43, "ev_joystick2_button8" },
+                { 50, "ev_global_left_button" },
+                { 51, "ev_global_right_button" },
+                { 52, "ev_global_middle_button" },
+                { 53, "ev_global_left_press" },
+                { 54, "ev_global_right_press" },
+                { 55, "ev_global_middle_press" },
+                { 56, "ev_global_left_release" },
+                { 57, "ev_global_right_release" },
+                { 58, "ev_global_middle_release" },
+                { 60, "ev_mouse_wheel_up" },
+                { 61, "ev_mouse_wheel_down" } };
+    }
+
+    class ObjectEvent
+    {
+        public string name;
+        public string[] content;
+        public int eventType;
+        public string eventName = null;
+        public int eventNum = -1;
+        string brackContent = "";
+        public ObjectEvent(string name, string[] content)
+        {
+            this.name = name;
+            this.content = content;
+        }
+        public void processData()
+        {
+            string name_edit = name;
+
+            if (name_edit.IndexOf('[') != -1)
+            {
+                string[] objNames = Gamemaker_Recompiler_Visual.Form.objectNames.ToArray();
+                char[] bracks = { };
+                int i1 = name_edit.IndexOf('[') + 1;
+                int i2 = name_edit.IndexOf(']') - 1;
+                //int i3 = 0;
+                for (int i = i1; i <= i2; i++)
+                {
+                    //bracks[i3] = name_edit[i];
+                    brackContent += name_edit[i];
+                    //i3++;
+                }
+                name_edit = name_edit.Remove(name_edit.IndexOf('['), name_edit.IndexOf(']') - name_edit.IndexOf('[') + 1);
+            }
+
+            switch (name_edit)
+            {
+                /*case "ev_user0":
+                case "ev_user1":
+                case "ev_user2":
+                case "ev_user3":
+                case "ev_user4":
+                case "ev_user5":
+                case "ev_user6":
+                case "ev_user7":
+                case "ev_user8":
+                case "ev_user9":
+                case "ev_user10":
+                case "ev_user11":
+                case "ev_user12":
+                case "ev_user13":
+                case "ev_user14":
+                case "ev_user15":
+                    eventType = 7;
+                    if (name_edit.Length == "ev_user0".Length)
+                    {
+                        char last = name_edit[name_edit.Length];
+                        eventNum = 10 + Convert.ToInt32(last);
+                    } else
+                    {
+                        char last1 = name_edit[name_edit.Length];
+                        char last2 = name_edit[name_edit.Length-1];
+                        string last = "";
+                        last += last1;
+                        last += last2;
+                        eventNum = 10 + Convert.ToInt32(last);
+                    }
+                    break;*/
+                case "ev_create":
+                    eventType = 0;
+                    eventNum = 0;
+                    break;
+                case "ev_destroy":
+                    eventType = 1;
+                    eventNum = 0;
+                    break;
+                case "ev_step_normal":  //step events
+                case "ev_step_begin":
+                case "ev_step_end":
+                    eventType = 3;
+                    switch (name_edit)
+                    {
+                        case "ev_step_normal":
+                            eventNum = 0;
+                            break;
+                        case "ev_step_begin":
+                            eventNum = 1;
+                            break;
+                        case "ev_step_end":
+                            eventNum = 2;
+                            break;
+                    }
+                    break;
+                case "ev_outside":
+                    bool isDraw = false;
+                    foreach (string str in content)
+                    {
+                        if (str.IndexOf("draw_") != -1) //hacky way of detecting it, may not always work :/
+                            isDraw = true;
+                    }
+                    if (isDraw)
+                    {
+                        name = "ev_draw";
+                        eventType = 8;
+                        eventNum = 0;
+                    } else
+                    {
+                        eventType = 7;
+                        eventNum = 0;
+                    }
+                    break;
+                case "ev_alarm":
+                    eventType = 2;
+                    eventNum = Convert.ToInt32(brackContent);
+                    break;
+                case "ev_collision":
+                    eventType = 4;
+                    eventName = Gamemaker_Recompiler_Visual.Form.objectNames.ToArray()[Convert.ToInt32(brackContent)]; // hopefully this works
+                    break;
+                case "ev_keypress":
+                case "ev_keyrelease":
+                case "ev_keyboard":
+                    if (name_edit == "ev_keypress")
+                        eventType = 9;
+                    else if (name_edit == "ev_keyboard")
+                        eventType = 5;
+                    else
+                        eventType = 10;
+                    if (brackContent.Length > "A".Length)
+                    {
+                        switch (brackContent)
+                        {
+                            case "NOKEY":
+                                eventNum = 0;
+                                break;
+                            case "ANYKEY":
+                                eventNum = 1;
+                                break;
+                            case "BACKSPACE":
+                                eventNum = 8;
+                                break;
+                            case "TAB":
+                                eventNum = 9;
+                                break;
+                            case "ENTER":
+                                eventNum = 13;
+                                break;
+                            case "SHIFT":
+                                eventNum = 16;
+                                break;
+                            case "CTRL":
+                                eventNum = 17;
+                                break;
+                            case "ALT":
+                                eventNum = 18;
+                                break;
+                            case "PAUSE":
+                                eventNum = 19;
+                                break;
+                            case "ESCAPE":
+                                eventNum = 27;
+                                break;
+                            case "SPACE":
+                                eventNum = 32;
+                                break;
+                            case "PAGEUP":
+                                eventNum = 33;
+                                break;
+                            case "PAGEDOWN":
+                                eventNum = 34;
+                                break;
+                            case "END":
+                                eventNum = 35;
+                                break;
+                            case "HOME":
+                                eventNum = 36;
+                                break;
+                            case "LEFT":
+                                eventNum = 37;
+                                break;
+                            case "UP":
+                                eventNum = 38;
+                                break;
+                            case "RIGHT":
+                                eventNum = 39;
+                                break;
+                            case "DOWN":
+                                eventNum = 40;
+                                break;
+                            case "INSERT":
+                                eventNum = 45;
+                                break;
+                            case "DELETE":
+                                eventNum = 46;
+                                break;
+                            case "NUM_0":
+                                eventNum = 96;
+                                break;
+                            case "NUM_1":
+                                eventNum = 97;
+                                break;
+                            case "NUM_2":
+                                eventNum = 98;
+                                break;
+                            case "NUM_3":
+                                eventNum = 99;
+                                break;
+                            case "NUM_4":
+                                eventNum = 100;
+                                break;
+                            case "NUM_5":
+                                eventNum = 101;
+                                break;
+                            case "NUM_6":
+                                eventNum = 102;
+                                break;
+                            case "NUM_7":
+                                eventNum = 103;
+                                break;
+                            case "NUM_8":
+                                eventNum = 104;
+                                break;
+                            case "NUM_9":
+                                eventNum = 105;
+                                break;
+                            case "NUM_STAR":
+                                eventNum = 106;
+                                break;
+                            case "NUM_PLUS":
+                                eventNum = 107;
+                                break;
+                            case "NUM_MINUS":
+                                eventNum = 109;
+                                break;
+                            case "NUM_DOT":
+                                eventNum = 110;
+                                break;
+                            case "NUM_DIV":
+                                eventNum = 111;
+                                break;
+                            case "F1":
+                                eventNum = 112;
+                                break;
+                            case "F2":
+                                eventNum = 113;
+                                break;
+                            case "F3":
+                                eventNum = 114;
+                                break;
+                            case "F4":
+                                eventNum = 115;
+                                break;
+                            case "F5":
+                                eventNum = 116;
+                                break;
+                            case "F6":
+                                eventNum = 117;
+                                break;
+                            case "F7":
+                                eventNum = 118;
+                                break;
+                            case "F8":
+                                eventNum = 119;
+                                break;
+                            case "F9":
+                                eventNum = 120;
+                                break;
+                            case "F10":
+                                eventNum = 121;
+                                break;
+                            case "F11":
+                                eventNum = 122;
+                                break;
+                            case "F12":
+                                eventNum = 123;
+                                break;
+                            case "NUM_LOCK":
+                                eventNum = 144;
+                                break;
+                            case "SCROLL_LOCK":
+                                eventNum = 145;
+                                break;
+                            case "SEMICOLON":
+                                eventNum = 186;
+                                break;
+                            case "PLUS":
+                                eventNum = 187;
+                                break;
+                            case "COMMA":
+                                eventNum = 188;
+                                break;
+                            case "MINUS":
+                                eventNum = 189;
+                                break;
+                            case "FULLSTOP":
+                                eventNum = 190;
+                                break;
+                            case "FWSLASH":
+                                eventNum = 191;
+                                break;
+                            case "AT":
+                                eventNum = 192;
+                                break;
+                            case "RIGHTSQBR":
+                                eventNum = 219;
+                                break;
+                            case "BKSLASH":
+                                eventNum = 220;
+                                break;
+                            case "LEFTSQBR":
+                                eventNum = 221;
+                                break;
+                            case "HASH":
+                                eventNum = 222;
+                                break;
+                            case "TILD":
+                                eventNum = 223;
+                                break;
+                            default:
+                                eventNum = 0;
+                                break;
+                        }
+                    } else
+                    {
+                        eventNum = ConvertCharToVirtualKey(brackContent[0]);
+                    }
+                    break;
+                case "ev_other":
+                    eventType = 7;
+                    eventNum = 0;
+                    break;
+                case "ev_trigger":  //obsolete, putting it here just in case
+                    eventType = 11;
+                    eventNum = 0;
+                    break;
+                default:
+                    if (EventDictionary.OtherEvents.ContainsValue(name_edit))
+                    {
+                        eventType = 7;
+                        eventNum = EventDictionary.OtherEvents.FirstOrDefault(x => x.Value == name_edit).Key;
+                    }
+                    if (EventDictionary.MouseEvents.ContainsValue(name_edit))
+                    {
+                        eventType = 6;
+                        eventNum = EventDictionary.MouseEvents.FirstOrDefault(x => x.Value == name_edit).Key;
+                    }
+                    break;
+            }
+            if (eventType == -1)
+            {
+                MessageBox.Show("Error interpreting event " + name);
+            }
+            if (eventName == null && eventNum == -1)
+            {
+                MessageBox.Show("Error interpreting event " + name);
+            }
+            for (int i = 0; i < content.Length; i++)
+            {
+                content[i] = content[i].Replace("self.", "").Replace("return // exit;", "exit;").Replace("\\\"", "\" + chr(ord(\'\"\')) + \"").Replace("\'", "'");
+                
+            }
+            
+        }
+
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        private static extern short VkKeyScan(char ch);
+
+        // http://stackoverflow.com/questions/2898806/how-to-convert-a-character-to-key-code
+        public static int ConvertCharToVirtualKey(char ch)
+        {
+            short vkey = VkKeyScan(ch);
+            int num = (vkey & 0xff);
+            return num;
+        }
+
+    }
+
+    class ObjectIndex
+    {
+        public int index;
+        public string name;
+        public ObjectIndex(int index, string name)
+        {
+            this.index = index;
+            this.name = name;
+        }
+    }
+
     static class Objects
     {
-        public static void Convert_Objects_From_Path(string path)
+        public static void GetNames(string path)
         {
             string[] objects = Objects.Get_Files(path);
+            ObjectIndex[] objs = new ObjectIndex[objects.Length];
             foreach (string Object in objects)
             {
                 if (Path.GetExtension(Path.GetFileName(Object)) == ".js")
                 {
-                    Objects.Convert_Object(path, Path.GetFileName(Object));
+                    string text = System.IO.File.ReadAllText(path + Path.GetFileName(Object));
+                    int object_info_a = text.IndexOf("Object:") + "Object:".Length;
+                    int object_info_b = text.IndexOf("/*");
+                    string object_info = text.Substring(object_info_a, object_info_b - object_info_a);
+                    int index_a = object_info.IndexOf("builtin.index = ") + "builtin.index = ".Length;
+                    int index_b = object_info.Remove(0, index_a).IndexOf("builtin.") + index_a;
+                    string index = object_info.Substring(index_a, index_b - index_a);
+                    int i = Convert.ToInt32(index);
+                    objs[i] = new ObjectIndex(i, Path.GetFileNameWithoutExtension(Object));
                 }
+            }
+            foreach (ObjectIndex Object in objs)
+            {
+                Gamemaker_Recompiler_Visual.Form.objectNames.Add(Object.name);
+            }
+        }
+
+        public static void Convert_Objects_From_Path(string path)
+        {
+            string[] objects = Gamemaker_Recompiler_Visual.Form.objectNames.ToArray();
+            foreach (string Object in objects)
+            {
+                Objects.Convert_Object(path, Object + ".js");
             }
             Form.running = false;
             Form.log_text.Add("Finished object conversion." + System.Environment.NewLine + objects.Length + " files processed.");
@@ -688,6 +1180,7 @@ namespace Gamemaker_Recompiler_Visual
         public static void Convert_Object(string path, string file)
         {
             string text = System.IO.File.ReadAllText(path + file);
+            string[] lines = System.IO.File.ReadAllLines(path + file);
 
             //System.Console.WriteLine("Contents of WriteText.txt = {0}", text);
             if (text != "")
@@ -780,149 +1273,40 @@ namespace Gamemaker_Recompiler_Visual
                     mask_name = mask_name.Substring(0, mask_name.IndexOf("\""));
                 }
 
-                //string name = file.Remove(file.Length-3);
+                List<ObjectEvent> events = new List<ObjectEvent>();
 
-                // CODE
-                string code_path = @path.Remove(path.Length - path.LastIndexOf("\\") - 1) + "code\\" + "gml_Object_" + name;
-                int code_index = 0;
-                string code_list = text;
+                string currentEvent = "";
+                List<string> currentContent = new List<string>();
+                bool inEvent = false;
 
-                List<string> code = new List<string> { "" };
-                List<string> code_event_name = new List<string> { "" };
-                List<int> code_enumb = new List<int> { 0 };
-
-                string[,] code_event_actions = new string[1000, 1000];
-                int code_event_action_index = 0;
-                string code_event_action_list = text;
-                string[] code_event_action = new string[1000];
-                string[,] code_event_action_code = new string[1000, 1000];
-
-                code_list = code_list.Replace("self.", "");
-
-                while (code_list.IndexOf("Event: ") != -1)
+                for(int i = 0; i < lines.Length; i++)
                 {
-                    code_event_action_index = 0;
-                    code_index += 1;
-                    code_event_actions[code_index, 0] = Convert.ToString(Convert.ToInt32(code_event_actions[code_index, 0]) + 1);
-
-                    /*while (code_event_action_list.IndexOf("action_") != -1)
+                    if (inEvent && lines[i].Replace(" ","") != "")
                     {
-                        code_event_action_index += 1;
-                        code_event_actions[code_index, 0] = Convert.ToString(Convert.ToInt32(code_event_actions[code_index, 0]) + 1);
-                        MessageBox.Show(Convert.ToString(code_event_action_list.IndexOf(")")));
-                        code_event_actions[code_index, code_event_action_index] = Convert.ToString(code_event_action_list.Remove(0, code_event_action_list.IndexOf("action_")).Substring(0, code_event_action_list.IndexOf(")")));
-                        code_event_action_list = code_event_action_list.Remove(code_event_action_list.IndexOf("action_"), "action_".Length);
-                        MessageBox.Show(code_event_actions[code_index, code_event_action_index]);
-                    }*/
-
-                    int code_event_name_a = code_list.IndexOf("Event: ") + "Event: ".Length;
-                    int code_event_name_b = code_list.Remove(0, code_event_name_a).IndexOf(System.Environment.NewLine) + code_event_name_a;
-                    code_event_name.Add(code_list.Substring(code_event_name_a, code_event_name_b - code_event_name_a));
-
-                    if (code_event_name[code_index].IndexOf("[") != -1)
-                    {
-                        if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(code_event_name[code_index].Remove(0, 2)).Substring(0, code_event_name[code_index].IndexOf("[") - (code_event_name[code_index].IndexOf("]") - code_event_name[code_index].IndexOf("["))) == "Keypress")
-                        {
-                            code.Add(code_path + "KeyPress" + "_" + code_event_name[code_index].Substring(code_event_name[code_index].IndexOf("[") + 1, code_event_name[code_index].IndexOf("]") - (code_event_name[code_index].IndexOf("[") + 1)) + ".js");
-                        }
-                        else if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(code_event_name[code_index].Remove(0, 2)).Substring(0, code_event_name[code_index].IndexOf("[") - (code_event_name[code_index].IndexOf("]") - code_event_name[code_index].IndexOf("["))) == "Keyrelease")
-                        {
-                            code.Add(code_path + "KeyRelease" + "_" + code_event_name[code_index].Substring(code_event_name[code_index].IndexOf("[") + 1, code_event_name[code_index].IndexOf("]") - (code_event_name[code_index].IndexOf("[") + 1)) + ".js");
-                        }
-                        else if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(code_event_name[code_index].Remove(0, 2)).Substring(0, code_event_name[code_index].IndexOf("[") - (code_event_name[code_index].IndexOf("]") - code_event_name[code_index].IndexOf("["))) == "Collisi")
-                        {
-                            code.Add(code_path + "Collision" + "_" + code_event_name[code_index].Substring(code_event_name[code_index].IndexOf("[") + 1, code_event_name[code_index].IndexOf("]") - (code_event_name[code_index].IndexOf("[") + 1)) + ".js");
-                        }
-                        else
-                        {
-                            code.Add(code_path + CultureInfo.CurrentCulture.TextInfo.ToTitleCase(code_event_name[code_index].Remove(0, 2)).Substring(0, code_event_name[code_index].IndexOf("[") - (code_event_name[code_index].IndexOf("]") - code_event_name[code_index].IndexOf("["))) + "_" + code_event_name[code_index].Substring(code_event_name[code_index].IndexOf("[") + 1, code_event_name[code_index].IndexOf("]") - (code_event_name[code_index].IndexOf("[") + 1)) + ".js");
-                        }
-
+                        lines[i] = lines[i].Remove(0,4).Replace("&","&amp;").Replace("<", "&lt;").Replace(">", "&gt;");
+                        currentContent.Add(lines[i]);
                     }
-                    else
+                    if (inEvent && lines[i].Replace(" ", "") == "")
                     {
-                        if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(code_event_name[code_index].Remove(0, 2)) == "Step_Normal")
+                        inEvent = false;
+                        events.Add(new ObjectEvent(currentEvent,currentContent.ToArray()));
+                    }
+                    if (lines[i].Split(' ')[0] == "Event:")
+                    {
+                        if (lines.Length >= 1)
                         {
-                            code.Add(code_path + "Step" + "_" + "0" + ".js");
-                        }
-                        else if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(code_event_name[code_index].Remove(0, 2)) == "Step_Begin")
-                        {
-                            code.Add(code_path + "Step" + "_" + "1" + ".js");
-                        }
-                        else if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(code_event_name[code_index].Remove(0, 2)) == "Step_End")
-                        {
-                            code.Add(code_path + "Step" + "_" + "2" + ".js");
-                        }
-                        
-                        else {
-                            code.Add(code_path + CultureInfo.CurrentCulture.TextInfo.ToTitleCase(code_event_name[code_index].Remove(0, 2)) + "_" + "0" + ".js");
+                            currentEvent = lines[i].Split(' ')[1];
+                            currentContent = new List<string>();
+                            inEvent = true;
                         }
                     }
 
-                    //CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Text)
-
-                    //MessageBox.Show(code[code_index]);
-
-                    code_list = code_list.Remove(0, code_list.IndexOf("Event: "));
-
-                    if (code_list.IndexOf("Event: ") != -1)
-                    {
-                        code_event_action_list = code_list.Substring(code_list.IndexOf("Event: "), code_list.Length);
-                        for (var i = 1; i < Convert.ToInt32(code_event_actions[code_index, 0]+1); i++)
-                        {
-                            if (code_event_action_list.IndexOf("action_") != -1)
-                            {
-                                MessageBox.Show(code_event_action_list.Substring(code_event_action_list.IndexOf("action_"), code_event_action_list.Remove(0, code_event_action_list.IndexOf("action_")).IndexOf(")") + 1));
-                                MessageBox.Show(code_event_action_list);
-                                /*if (i != Convert.ToInt32(code_event_actions[code_index, 0]))
-                                {*/
-                                    code_event_actions[code_index, i] = code_event_action_list.Substring(code_event_action_list.IndexOf("action_"), code_event_action_list.Remove(0, code_event_action_list.IndexOf("action_")).IndexOf(")") + 1);
-                                    code_event_action_list = code_event_action_list.Remove(code_event_action_list.IndexOf("action_"), code_event_action_list.Remove(0, code_event_action_list.IndexOf("action_")).IndexOf(")") + 1);
-                                /*}
-                                else
-                                {
-                                    code_event_actions[code_index, i] = code_event_action_list.Substring(0, code_event_action_list.Length);
-                                    code_event_action_list = code_event_action_list.Remove(code_event_action_list.IndexOf("action_"), code_event_action_list.Remove(0, code_event_action_list.IndexOf("action_")).IndexOf(")"));
-                                }*/
-                            }
-                        }
-
-                        code_event_action_list = code_list.Substring(code_list.IndexOf("Event: "), code_list.Length);
-                        var code_amount = 0;
-                        while (code_event_action_list.IndexOf("action_") != -1)
-                        {
-                            MessageBox.Show("EVENT ACTION LIST\n" + code_event_action_list);
-                            MessageBox.Show("EVENT ACTION CODE\n" + code_event_action_code[code_index, code_amount]);
-                            MessageBox.Show(code_event_action_list.Remove(0, code_event_action_list.Remove(0, code_event_action_list.IndexOf("action_")).IndexOf(")") + 3));
-                            code_amount += 1;
-                            if (code_event_action_list.Remove(0, code_event_action_list.Remove(0, code_event_action_list.IndexOf("action_")).IndexOf(")") + 3).StartsWith("action_") == false)
-                            {
-                                if (code_event_action_list.IndexOf("Event: ") == -1)
-                                {
-                                    code_event_action_code[code_index, code_amount] = code_event_action_list.Substring(0, code_event_action_list.IndexOf("action_"));
-                                    code_event_action_list = code_event_action_list.Remove(0, code_event_action_list.IndexOf("action_"));
-                                }
-                                else
-                                {
-                                    code_event_action_code[code_index, code_amount] = code_event_action_list.Substring(0, code_event_action_list.IndexOf("Event: "));
-                                    code_event_action_list = code_event_action_list.Remove(0, code_event_action_list.IndexOf("Event: "));
-                                }
-                            }
-                            code_event_action_list = code_event_action_list.Remove(0, code_event_action_list.Remove(0, code_event_action_list.IndexOf("action_")).IndexOf(")") + 1);
-                        }
-                        if (code_event_action_list.Length != 0)
-                        {
-                            code_event_action_code[code_index, code_amount + 1] = code_event_action_list.Substring(0, code_event_action_list.Length);
-                        }
-
-                        code_list = code_list.Remove(0, code_list.IndexOf("Event: ") + "Event: ".Length);
-                    }/* else
-                    {
-                        code_event_action_list = code_list.Substring(0, code_list.Length);
-                    }*/
                 }
-                
 
+                for(int j = 0; j < events.Count; j++)
+                {
+                    events[j].processData();
+                }
 
 
 
@@ -937,165 +1321,54 @@ namespace Gamemaker_Recompiler_Visual
                 rewrite += "    <persistent>" + persistent + "</persistent>@";
                 rewrite += "    <parentName>" + parent_name + "</parentName>@";
                 rewrite += "    <maskName>" + mask_name + "</maskName>@";
-
-                if (code_index != 0)
+                rewrite += "    <events>@";
+                /*
+                <event eventtype="7" enumb="10">@
+                  <action>@
+                    <libid>1</libid>@
+                    <id>603</id>@
+                    <kind>7</kind>@
+                    <userelative>0</userelative>@
+                    <isquestion>0</isquestion>@
+                    <useapplyto>-1</useapplyto>@
+                    <exetype>2</exetype>@
+                    <functionname></functionname>@
+                    <codestring></codestring>@
+                    <whoName>self</whoName>@
+                    <relative>0</relative>@
+                    <isnot>0</isnot>@
+                    <arguments>@
+                      <argument>@
+                        <kind>1</kind>@
+                        <string></string>@
+                      </argument>@
+                    </arguments>@
+                  </action>@
+                </event>@
+                 */
+                for (int z = 0; z < events.Count; z++)
                 {
-                    rewrite += "    <events>@";
-
-                    for (var n = 1; n < code_index + 1; n++)
+                    if (events[z].eventName == null)
+                        rewrite += "        <event eventtype=\"" + Convert.ToString(events[z].eventType) + "\" enumb=\"" + Convert.ToString(events[z].eventNum) + "\">@";
+                    else
+                        rewrite += "        <event eventtype=\"" + Convert.ToString(events[z].eventType) + "\" ename=\"" + events[z].eventName + "\">@";
+                    rewrite += "            <action>@";
+                    rewrite += "                <libid>1</libid>@                <id>603</id>@                <kind>7</kind>@                <userelative>0</userelative>@                <isquestion>0</isquestion>@                <useapplyto>-1</useapplyto>@                <exetype>2</exetype>@                <functionname></functionname>@                <codestring></codestring>@                <whoName>self</whoName>@                <relative>0</relative>@                <isnot>0</isnot>@";
+                    rewrite += "                <arguments>@";
+                    rewrite += "                    <argument>@";
+                    rewrite += "                        <kind>1</kind>@";
+                    rewrite += "                        <string>";
+                    for (int y = 0; y < events[z].content.Length; y++)
                     {
-                        if (code_event_name[n].IndexOf("[") != -1)
-                        {
-                            if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(code_event_name[n].Remove(0, 2)).Substring(0, code_event_name[n].IndexOf("[") - (code_event_name[n].IndexOf("]") - code_event_name[n].IndexOf("["))) == "_Outside")
-                            {
-                                rewrite += "        <event eventtype=\"" + Event_To_Number("___Other") + "\" enumb=\"" + "0" + "\">@";
-                            }
-                            else {
-                                rewrite += "        <event eventtype=\"" + Event_To_Number(code_event_name[n]) + "\" enumb=\"" + code_event_name[n].Substring(code_event_name[n].IndexOf("[") + 1, code_event_name[n].IndexOf("]") - (code_event_name[n].IndexOf("[") + 1)) + "\">@";
-                            }
-                        }
-                        else
-                        {
-                            // STEP
-                            if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(code_event_name[n].Remove(0, 2)) == "_Step_Normal")
-                            {
-                                rewrite += "        <event eventtype=\"" + Event_To_Number("___Step") + "\" enumb=\"" + "0" + "\">@";
-                            }
-                            else if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(code_event_name[n].Remove(0, 2)) == "_Step_Begin")
-                            {
-                                rewrite += "        <event eventtype=\"" + Event_To_Number("___Step") + "\" enumb=\"" + "1" + "\">@";
-                            }
-                            else if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(code_event_name[n].Remove(0, 2)) == "_Step_End")
-                            {
-                                rewrite += "        <event eventtype=\"" + Event_To_Number("___Step") + "\" enumb=\"" + "2" + "\">@";
-                            }
-                            // OTHER
-                            else if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(code_event_name[n].Remove(0, 2)) == "_Outside")
-                            {
-                                rewrite += "        <event eventtype=\"" + Event_To_Number("___Other") + "\" enumb=\"" + "0" + "\">@";
-                            }
-                            else if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(code_event_name[n].Remove(0, 2)) == "_User0")
-                            {
-                                rewrite += "        <event eventtype=\"" + Event_To_Number("___Other") + "\" enumb=\"" + "10" + "\">@";
-                            }
-                            else if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(code_event_name[n].Remove(0, 2)) == "_User1")
-                            {
-                                rewrite += "        <event eventtype=\"" + Event_To_Number("___Other") + "\" enumb=\"" + "11" + "\">@";
-                            }
-                            else if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(code_event_name[n].Remove(0, 2)) == "_User2")
-                            {
-                                rewrite += "        <event eventtype=\"" + Event_To_Number("___Other") + "\" enumb=\"" + "12" + "\">@";
-                            }
-                            else if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(code_event_name[n].Remove(0, 2)) == "_User3")
-                            {
-                                rewrite += "        <event eventtype=\"" + Event_To_Number("___Other") + "\" enumb=\"" + "13" + "\">@";
-                            }
-                            else if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(code_event_name[n].Remove(0, 2)) == "_User4")
-                            {
-                                rewrite += "        <event eventtype=\"" + Event_To_Number("___Other") + "\" enumb=\"" + "14" + "\">@";
-                            }
-                            else if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(code_event_name[n].Remove(0, 2)) == "_User5")
-                            {
-                                rewrite += "        <event eventtype=\"" + Event_To_Number("___Other") + "\" enumb=\"" + "15" + "\">@";
-                            }
-                            else if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(code_event_name[n].Remove(0, 2)) == "_User6")
-                            {
-                                rewrite += "        <event eventtype=\"" + Event_To_Number("___Other") + "\" enumb=\"" + "16" + "\">@";
-                            }
-                            else if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(code_event_name[n].Remove(0, 2)) == "_User7")
-                            {
-                                rewrite += "        <event eventtype=\"" + Event_To_Number("___Other") + "\" enumb=\"" + "17" + "\">@";
-                            }
-                            else if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(code_event_name[n].Remove(0, 2)) == "_User8")
-                            {
-                                rewrite += "        <event eventtype=\"" + Event_To_Number("___Other") + "\" enumb=\"" + "18" + "\">@";
-                            }
-                            else if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(code_event_name[n].Remove(0, 2)) == "_User9")
-                            {
-                                rewrite += "        <event eventtype=\"" + Event_To_Number("___Other") + "\" enumb=\"" + "19" + "\">@";
-                            }
-                            else if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(code_event_name[n].Remove(0, 2)) == "_User10")
-                            {
-                                rewrite += "        <event eventtype=\"" + Event_To_Number("___Other") + "\" enumb=\"" + "20" + "\">@";
-                            }
-                            else if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(code_event_name[n].Remove(0, 2)) == "_User11")
-                            {
-                                rewrite += "        <event eventtype=\"" + Event_To_Number("___Other") + "\" enumb=\"" + "21" + "\">@";
-                            }
-                            else if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(code_event_name[n].Remove(0, 2)) == "_User12")
-                            {
-                                rewrite += "        <event eventtype=\"" + Event_To_Number("___Other") + "\" enumb=\"" + "22" + "\">@";
-                            }
-                            else if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(code_event_name[n].Remove(0, 2)) == "_User13")
-                            {
-                                rewrite += "        <event eventtype=\"" + Event_To_Number("___Other") + "\" enumb=\"" + "23" + "\">@";
-                            }
-                            else if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(code_event_name[n].Remove(0, 2)) == "_User14")
-                            {
-                                rewrite += "        <event eventtype=\"" + Event_To_Number("___Other") + "\" enumb=\"" + "24" + "\">@";
-                            }
-                            else if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(code_event_name[n].Remove(0, 2)) == "_User15")
-                            {
-                                rewrite += "        <event eventtype=\"" + Event_To_Number("___Other") + "\" enumb=\"" + "25" + "\">@";
-                            }
-                            // MOUSE
-                            else if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(code_event_name[n].Remove(0, 2)) == "_Mouse_Left_Button")
-                            {
-                                rewrite += "        <event eventtype=\"" + Event_To_Number("___Mouse") + "\" enumb=\"" + "0" + "\">@";
-                            }
-                            else if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(code_event_name[n].Remove(0, 2)) == "_Mouse_Right_Button")
-                            {
-                                rewrite += "        <event eventtype=\"" + Event_To_Number("___Mouse") + "\" enumb=\"" + "1" + "\">@";
-                            }
-                            else if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(code_event_name[n].Remove(0, 2)) == "_Mouse_Middle_Button")
-                            {
-                                rewrite += "        <event eventtype=\"" + Event_To_Number("___Mouse") + "\" enumb=\"" + "2" + "\">@";
-                            }
-                            else {
-                                rewrite += "        <event eventtype=\"" + Event_To_Number(code_event_name[n]) + "\" enumb=\"" + "0" + "\">@";
-                            }
-                            //MessageBox.Show(CultureInfo.CurrentCulture.TextInfo.ToTitleCase(code_event_name[n].Remove(0, 2)));
-                        }
-
-                        for(var i = 0; i < code_event_action_index; i++)
-                        {
-                            
-                            rewrite += "            <action>@";
-
-                            rewrite += "                <libid>" + "" + "</libid>@";
-                            rewrite += "                <id>" + "" + "</id>@";
-                            rewrite += "                <kind>" + "" + "</kind>@";
-                            rewrite += "                <userelative>" + "" + "</userelative>@";
-                            rewrite += "                <isquestion>" + "" + "</isquestion>@";
-                            rewrite += "                <useapplyto>" + "" + "</useapplyto>@";
-                            rewrite += "                <exetype>" + "" + "</exetype>@";
-                            rewrite += "                <functionname>" + "" + "</functionname>@";
-                            rewrite += "                <codestring>" + "" + "</codestring>@";
-                            rewrite += "                <whoName>" + "" + "</whoName>@";
-                            rewrite += "                <relative>" + "" + "</relative>@";
-                            rewrite += "                <isnot>" + "" + "</isnot>@";
-                            rewrite += "                <arguments>@";
-
-                            rewrite += "                    <argument>@";
-
-                            rewrite += "                        <kind>" + "" + "</kind>@";
-                            rewrite += "                        <string>" + "" + "</string>@";
-
-                            rewrite += "                    </argument>@";
-
-                            rewrite += "                </arguments>@";
-                            rewrite += "            </action>@";
-                        }
-
-                        rewrite += "        </event>@";
+                        rewrite += events[z].content[y] + "@";
                     }
-
-                    rewrite += "    </events>@";
+                    rewrite += "</string>@";
+                    rewrite += "                    </argument>@";
+                    rewrite += "                </arguments>@";
+                    rewrite += "            </action>@";
+                    rewrite += "        </event>@";
                 }
-                else
-                {
-                    rewrite += "    <events/>@";
-                }
+                rewrite += "    </events>@";
                 rewrite += "    <PhysicsObject>" + "0" + "</PhysicsObject>@";
                 rewrite += "    <PhysicsObjectSensor>" + "0" + "</PhysicsObjectSensor>@";
                 rewrite += "    <PhysicsObjectShape>" + "0" + "</PhysicsObjectShape>@";
@@ -1125,11 +1398,13 @@ namespace Gamemaker_Recompiler_Visual
                 //    "\n has been output to file " + name + ".sprite.gmx" + ", path " + path + "converted");
             }
         }
-
-        public static int Event_To_Number(string Event) {
+        /*
+        public static int Event_To_Number(string Event)
+        {
             var Number = -1;
 
-            if (Event.IndexOf("[") != -1) {
+            if (Event.IndexOf("[") != -1)
+            {
                 if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Event.Remove(0, 2)).Substring(0, Event.IndexOf("[") - (Event.IndexOf("]") - Event.IndexOf("["))) == "_Create")
                 {
                     Number = 0;
@@ -1192,7 +1467,8 @@ namespace Gamemaker_Recompiler_Visual
                     Number = 10;
                 }
                 //MessageBox.Show(CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Event.Remove(0, 2)).Substring(0, Event.IndexOf("[") - (Event.IndexOf("]") - Event.IndexOf("["))));
-            } else
+            }
+            else
             {
                 if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Event.Remove(0, 2)) == "_Create")
                 {
@@ -1238,7 +1514,8 @@ namespace Gamemaker_Recompiler_Visual
                 {
                     Number = 7;
                 }
-                for (var i = 0; i < 16; i++) {
+                for (var i = 0; i < 16; i++)
+                {
                     if (CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Event.Remove(0, 2)) == "_User" + i)
                     {
                         Number = 7;
@@ -1262,10 +1539,10 @@ namespace Gamemaker_Recompiler_Visual
                 }
                 //MessageBox.Show(CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Event.Remove(0, 2)));
             }
-            
+
 
             return Number;
-        }
+        }*/
 
         public static string[] Get_Files(string path)
         {
@@ -1304,7 +1581,12 @@ namespace Gamemaker_Recompiler_Visual
                 string script_name = text.Substring("// ScriptName: ".Length, script_name_a);
 
                 // SCRIPT CODE
-                string script_code = System.IO.File.ReadAllText(@path.Remove(path.Length-path.LastIndexOf("\\")-1) + "code\\" + "gml_Script_" + script_name + ".js");
+                string script_code = System.IO.File.ReadAllText(@path.Remove(path.Length - path.LastIndexOf("\\") - 1) + "code\\" + "gml_Script_" + script_name + ".js").Replace("\\\"", "\" + chr(ord(\'\"\'))").Replace(System.Environment.NewLine + "    ", System.Environment.NewLine + "").Replace("\'", "'");
+                if (script_code != "")
+                {
+                    script_code = script_code.Remove(0, 4);
+                    
+                }
                 //MessageBox.Show(script_code);
 
                 script_code = script_code.Replace("self.", "");
@@ -1449,7 +1731,7 @@ namespace Gamemaker_Recompiler_Visual
 
                     /*if (Convert.ToInt32(index) <= 0)
                     {*/
-                        Fonts.Create_Font(Convert.ToInt32(x[0]), Convert.ToInt32(y[0]), Convert.ToInt32(width_spr[0]), Convert.ToInt32(height_spr[0]), path.Remove(path.Length - @"fonts\".Length), Path.GetFileName(font).Remove(Path.GetFileName(font).Length - 4) + ".png", Convert.ToInt32(tex[0]));
+                    Fonts.Create_Font(Convert.ToInt32(x[0]), Convert.ToInt32(y[0]), Convert.ToInt32(width_spr[0]), Convert.ToInt32(height_spr[0]), path.Remove(path.Length - @"fonts\".Length), Path.GetFileName(font).Remove(Path.GetFileName(font).Length - 4) + ".png", Convert.ToInt32(tex[0]));
                     /*}
                     else
                     {
@@ -1574,7 +1856,7 @@ namespace Gamemaker_Recompiler_Visual
             int[] glyph_col_shift_a = new int[500];
             int[] glyph_col_shift_b = new int[500];
             string[] glyph_col_shift = new string[500];
-            
+
             // GLYPH OFFSET COLLECTIONS
             int[] glyph_col_offset_a = new int[500];
             int[] glyph_col_offset_b = new int[500];
@@ -1619,8 +1901,8 @@ namespace Gamemaker_Recompiler_Visual
                 glyph_col_offset[i] = glyph_col[i].Substring(glyph_col_offset_a[i], glyph_col_offset_b[i] - glyph_col_offset_a[i]);
             }
 
-                // REWRITE
-                string rewrite = "";
+            // REWRITE
+            string rewrite = "";
             rewrite += "<!--This Document is generated by GameMaker Project Recreater, if you edit it by hand then you do so at your own risk!-->@";
             rewrite += "<font>@";
             rewrite += "    <name>" + name + "</name>@";
@@ -1636,7 +1918,8 @@ namespace Gamemaker_Recompiler_Visual
             rewrite += "    <ranges>@" + "        <range0>" + width + "," + height + "</range0>@" + "    </ranges>@";
             rewrite += "    <glyphs>@";
 
-            for (var n = 0; n < Convert.ToInt32(glyph_index)+1; n++) {
+            for (var n = 0; n < Convert.ToInt32(glyph_index) + 1; n++)
+            {
                 rewrite += "        <glyph character=\"" + Convert.ToInt32(firstchar) + n + "\" x=\"" + glyph_col_x[n] + "\" y=\"" + glyph_col_y[n] + "\" w=\"" + glyph_col_w[n] + "\" h=\"" + glyph_col_h[n] + "\" shift=\"" + glyph_col_shift[n] + "\" offset=\"" + glyph_col_offset[n] + "\"/>@";
             }
 
@@ -1742,39 +2025,39 @@ namespace Gamemaker_Recompiler_Visual
                     text = text.Remove(text.LastIndexOf("<index>"), (text.LastIndexOf("</index>") + "</index>".Length) - text.LastIndexOf("<index>"));
 
                     // X
-                        int x_a = text.LastIndexOf("<X>") + "<X>".Length;
-                        int x_b = text.LastIndexOf("</X>");
-                        //MessageBox.Show("X" + a + "   a: " + x_a + "   b: " + x_b);
-                        x.Add(text.Substring(x_a, x_b - x_a));
-                        text = text.Remove(text.LastIndexOf("<X>"), (text.LastIndexOf("</X>") + "</X>".Length) - text.LastIndexOf("<X>"));
+                    int x_a = text.LastIndexOf("<X>") + "<X>".Length;
+                    int x_b = text.LastIndexOf("</X>");
+                    //MessageBox.Show("X" + a + "   a: " + x_a + "   b: " + x_b);
+                    x.Add(text.Substring(x_a, x_b - x_a));
+                    text = text.Remove(text.LastIndexOf("<X>"), (text.LastIndexOf("</X>") + "</X>".Length) - text.LastIndexOf("<X>"));
 
                     // Y
-                        int y_a = text.LastIndexOf("<Y>") + "<Y>".Length;
-                        int y_b = text.LastIndexOf("</Y>");
-                        //MessageBox.Show("a: " + y_a + "   b: " + y_b);
-                        y.Add(text.Substring(y_a, y_b - y_a));
-                        text = text.Remove(text.LastIndexOf("<Y>"), (text.LastIndexOf("</Y>") + "</Y>".Length) - text.LastIndexOf("<Y>"));
+                    int y_a = text.LastIndexOf("<Y>") + "<Y>".Length;
+                    int y_b = text.LastIndexOf("</Y>");
+                    //MessageBox.Show("a: " + y_a + "   b: " + y_b);
+                    y.Add(text.Substring(y_a, y_b - y_a));
+                    text = text.Remove(text.LastIndexOf("<Y>"), (text.LastIndexOf("</Y>") + "</Y>".Length) - text.LastIndexOf("<Y>"));
 
                     // WIDTH
-                        int width_spr_a = text.LastIndexOf("<Width>") + "<Width>".Length;
-                        int width_spr_b = text.LastIndexOf("</Width>");
-                        //MessageBox.Show("a: " + width_spr_a + "   b: " + width_spr_b);
-                        width_spr.Add(text.Substring(width_spr_a, width_spr_b - width_spr_a));
-                        text = text.Remove(text.LastIndexOf("<Width>"), (text.LastIndexOf("</Width>") + "</Width>".Length) - text.LastIndexOf("<Width>"));
+                    int width_spr_a = text.LastIndexOf("<Width>") + "<Width>".Length;
+                    int width_spr_b = text.LastIndexOf("</Width>");
+                    //MessageBox.Show("a: " + width_spr_a + "   b: " + width_spr_b);
+                    width_spr.Add(text.Substring(width_spr_a, width_spr_b - width_spr_a));
+                    text = text.Remove(text.LastIndexOf("<Width>"), (text.LastIndexOf("</Width>") + "</Width>".Length) - text.LastIndexOf("<Width>"));
 
                     // HEIGHT
-                        int height_spr_a = text.LastIndexOf("<Height>") + "<Height>".Length;
-                        int height_spr_b = text.LastIndexOf("</Height>");
-                        //MessageBox.Show("a: " + height_spr_a + "   b: " + height_spr_b);
-                        height_spr.Add(text.Substring(height_spr_a, height_spr_b - height_spr_a));
-                        text = text.Remove(text.LastIndexOf("<Height>"), (text.LastIndexOf("</Height>") + "</Height>".Length) - text.LastIndexOf("<Height>"));
+                    int height_spr_a = text.LastIndexOf("<Height>") + "<Height>".Length;
+                    int height_spr_b = text.LastIndexOf("</Height>");
+                    //MessageBox.Show("a: " + height_spr_a + "   b: " + height_spr_b);
+                    height_spr.Add(text.Substring(height_spr_a, height_spr_b - height_spr_a));
+                    text = text.Remove(text.LastIndexOf("<Height>"), (text.LastIndexOf("</Height>") + "</Height>".Length) - text.LastIndexOf("<Height>"));
 
                     // TEXTURE NUMBER
-                        int tex_a = text.LastIndexOf("<Texture_Index>") + "<Texture_Index>".Length;
-                        int tex_b = text.LastIndexOf("</Texture_Index>");
-                        //MessageBox.Show("a: " + tex_a + "   b: " + tex_b);
-                        tex.Add(text.Substring(tex_a, tex_b - tex_a));
-                        text = text.Remove(text.LastIndexOf("<Texture_Index>"), (text.LastIndexOf("</Texture_Index>") + "</Texture_Index>".Length) - text.LastIndexOf("<Texture_Index>"));
+                    int tex_a = text.LastIndexOf("<Texture_Index>") + "<Texture_Index>".Length;
+                    int tex_b = text.LastIndexOf("</Texture_Index>");
+                    //MessageBox.Show("a: " + tex_a + "   b: " + tex_b);
+                    tex.Add(text.Substring(tex_a, tex_b - tex_a));
+                    text = text.Remove(text.LastIndexOf("<Texture_Index>"), (text.LastIndexOf("</Texture_Index>") + "</Texture_Index>".Length) - text.LastIndexOf("<Texture_Index>"));
 
                     // MessageBox.Show(path.Remove(path.Length - @"sprites\".Length));
 
@@ -1840,19 +2123,29 @@ namespace Gamemaker_Recompiler_Visual
                         roomText = roomText.Substring(roomText.IndexOf("<Tiles>"), roomText.Length - roomText.IndexOf("<Tiles>"));
                         if (roomText.IndexOf(index) != -1)
                         {
-                            if (roomText.Substring(roomText.IndexOf(index)+2, roomText.Length - (roomText.IndexOf(index)+2)).StartsWith("</Background_Index>"))
+                            if (roomText.Substring(roomText.IndexOf(index) + 2, roomText.Length - (roomText.IndexOf(index) + 2)).StartsWith("</Background_Index>"))
                             {
                                 //if (name == "bg_elevleg") MessageBox.Show(roomText.Substring(roomText.IndexOf(index), roomText.Length - roomText.IndexOf(index)));
                                 usedAsTileset = -1;
                                 roomText = roomText.Substring(roomText.IndexOf(index), roomText.Length - roomText.IndexOf(index));
                                 //if (name == "bg_elevleg") MessageBox.Show(roomText);
-
-                                if(Convert.ToInt32(roomText.Substring(roomText.IndexOf("<Offset_X>") + "<Offset_X>".Length, roomText.IndexOf("</Offset_X>") - (roomText.IndexOf("<Offset_X>") + "<Offset_X>".Length))) > tilesetOffsetX) tilesetOffsetX = Convert.ToInt32(roomText.Substring(roomText.IndexOf("<Offset_X>") + "<Offset_X>".Length, roomText.IndexOf("</Offset_X>") - (roomText.IndexOf("<Offset_X>") + "<Offset_X>".Length)));
-                                //if (name == "bg_elevleg") MessageBox.Show(Convert.ToString(tilesetOffsetX));
-                                if (Convert.ToInt32(roomText.Substring(roomText.IndexOf("<Offset_Y>") + "<Offset_Y>".Length, roomText.IndexOf("</Offset_Y>") - (roomText.IndexOf("<Offset_Y>") + "<Offset_Y>".Length))) > tilesetOffsetY) tilesetOffsetY = Convert.ToInt32(roomText.Substring(roomText.IndexOf("<Offset_Y>") + "<Offset_Y>".Length, roomText.IndexOf("</Offset_Y>") - (roomText.IndexOf("<Offset_Y>") + "<Offset_Y>".Length)));
-                                //if (name == "bg_elevleg") MessageBox.Show(Convert.ToString(tilesetOffsetY));
-                                if (Convert.ToInt32(roomText.Substring(roomText.IndexOf("<Width>") + "<Width>".Length, roomText.IndexOf("</Width>") - (roomText.IndexOf("<Width>") + "<Width>".Length))) > tilesetSizeX) tilesetSizeX = Convert.ToInt32(roomText.Substring(roomText.IndexOf("<Width>") + "<Width>".Length, roomText.IndexOf("</Width>") - (roomText.IndexOf("<Width>") + "<Width>".Length)));
-                                if (Convert.ToInt32(roomText.Substring(roomText.IndexOf("<Height>") + "<Height>".Length, roomText.IndexOf("</Height>") - (roomText.IndexOf("<Height>") + "<Height>".Length))) > tilesetSizeY) tilesetSizeY = Convert.ToInt32(roomText.Substring(roomText.IndexOf("<Height>") + "<Height>".Length, roomText.IndexOf("</Height>") - (roomText.IndexOf("<Height>") + "<Height>".Length)));
+                                if (tilesetSizeX != 0)
+                                {
+                                    if (Convert.ToInt32(roomText.Substring(roomText.IndexOf("<Offset_X>") + "<Offset_X>".Length, roomText.IndexOf("</Offset_X>") - (roomText.IndexOf("<Offset_X>") + "<Offset_X>".Length))) < tilesetOffsetX) tilesetOffsetX = Convert.ToInt32(roomText.Substring(roomText.IndexOf("<Offset_X>") + "<Offset_X>".Length, roomText.IndexOf("</Offset_X>") - (roomText.IndexOf("<Offset_X>") + "<Offset_X>".Length)));
+                                    //if (name == "bg_elevleg") MessageBox.Show(Convert.ToString(tilesetOffsetX));
+                                    if (Convert.ToInt32(roomText.Substring(roomText.IndexOf("<Offset_Y>") + "<Offset_Y>".Length, roomText.IndexOf("</Offset_Y>") - (roomText.IndexOf("<Offset_Y>") + "<Offset_Y>".Length))) < tilesetOffsetY) tilesetOffsetY = Convert.ToInt32(roomText.Substring(roomText.IndexOf("<Offset_Y>") + "<Offset_Y>".Length, roomText.IndexOf("</Offset_Y>") - (roomText.IndexOf("<Offset_Y>") + "<Offset_Y>".Length)));
+                                    //if (name == "bg_elevleg") MessageBox.Show(Convert.ToString(tilesetOffsetY));
+                                    if (Convert.ToInt32(roomText.Substring(roomText.IndexOf("<Width>") + "<Width>".Length, roomText.IndexOf("</Width>") - (roomText.IndexOf("<Width>") + "<Width>".Length))) < tilesetSizeX) tilesetSizeX = Convert.ToInt32(roomText.Substring(roomText.IndexOf("<Width>") + "<Width>".Length, roomText.IndexOf("</Width>") - (roomText.IndexOf("<Width>") + "<Width>".Length)));
+                                    if (Convert.ToInt32(roomText.Substring(roomText.IndexOf("<Height>") + "<Height>".Length, roomText.IndexOf("</Height>") - (roomText.IndexOf("<Height>") + "<Height>".Length))) < tilesetSizeY) tilesetSizeY = Convert.ToInt32(roomText.Substring(roomText.IndexOf("<Height>") + "<Height>".Length, roomText.IndexOf("</Height>") - (roomText.IndexOf("<Height>") + "<Height>".Length)));
+                                } else
+                                {
+                                    tilesetOffsetX = Convert.ToInt32(roomText.Substring(roomText.IndexOf("<Offset_X>") + "<Offset_X>".Length, roomText.IndexOf("</Offset_X>") - (roomText.IndexOf("<Offset_X>") + "<Offset_X>".Length)));
+                                    //if (name == "bg_elevleg") MessageBox.Show(Convert.ToString(tilesetOffsetX));
+                                    tilesetOffsetY = Convert.ToInt32(roomText.Substring(roomText.IndexOf("<Offset_Y>") + "<Offset_Y>".Length, roomText.IndexOf("</Offset_Y>") - (roomText.IndexOf("<Offset_Y>") + "<Offset_Y>".Length)));
+                                    //if (name == "bg_elevleg") MessageBox.Show(Convert.ToString(tilesetOffsetY));
+                                    tilesetSizeX = Convert.ToInt32(roomText.Substring(roomText.IndexOf("<Width>") + "<Width>".Length, roomText.IndexOf("</Width>") - (roomText.IndexOf("<Width>") + "<Width>".Length)));
+                                    tilesetSizeY = Convert.ToInt32(roomText.Substring(roomText.IndexOf("<Height>") + "<Height>".Length, roomText.IndexOf("</Height>") - (roomText.IndexOf("<Height>") + "<Height>".Length)));
+                                }
 
                                 //break;
                             }
@@ -1971,7 +2264,7 @@ namespace Gamemaker_Recompiler_Visual
             // KIND
             int kind_a = text.IndexOf("<filename>") + "<filename>".Length;
             int kind_b = text.IndexOf("</filename>");
-            string kind = text.Substring(kind_a, kind_b - kind_a).Remove(0, text.Substring(kind_a, kind_b - kind_a).Length-4);
+            string kind = text.Substring(kind_a, kind_b - kind_a).Remove(0, text.Substring(kind_a, kind_b - kind_a).Length - 4);
             System.Console.WriteLine("Kind: {0}", kind);
             if (kind == ".wav") kind = "0";
             else if (kind == ".mp3") kind = "1";
@@ -2039,6 +2332,12 @@ namespace Gamemaker_Recompiler_Visual
 
             System.IO.File.WriteAllText(path + "converted\\" + name + ".sound.gmx", rewrite);
 
+            System.IO.Directory.CreateDirectory(path + "converted\\sound\\audio");
+            if (System.IO.File.Exists(path + name + extension) && !System.IO.File.Exists(path + "converted\\sound\\audio\\" + name + extension))
+            {
+                System.IO.File.Copy(path + name + extension, path + "converted\\sound\\audio\\" + name + extension);
+            }
+
             //Form.log_text.Add(System.IO.File.ReadAllText(path + "converted\\" + name + ".sprite.gmx") +
             //    "\n has been output to file " + name + ".sprite.gmx" + ", path " + path + "converted");
         }
@@ -2078,17 +2377,17 @@ namespace Gamemaker_Recompiler_Visual
                 var format = myBitmap.PixelFormat;
 
                 //Bitmap cloneBitmap = myBitmap.Clone(cloneRect, format);
-                if (width+x > myBitmap.Width)
+                if (width + x > myBitmap.Width)
                 {
-                    width = width-1 - ( width - myBitmap.Width );
+                    width = width - 1 - (width - myBitmap.Width);
                 }
 
-                if (height+y > myBitmap.Height)
+                if (height + y > myBitmap.Height)
                 {
                     height = height - 1 - (height - myBitmap.Height);
                 }
 
-                File.WriteAllText(@path + @"sprites\converted\images\data.txt", "Name: " + file + "   Width: " + Convert.ToString(width+x) + "   Height: " + Convert.ToString(height+y) + "   Tex width: " + Convert.ToString(myBitmap.Width) + "   Tex height: " + Convert.ToString(myBitmap.Height));
+                File.WriteAllText(@path + @"sprites\converted\images\data.txt", "Name: " + file + "   Width: " + Convert.ToString(width + x) + "   Height: " + Convert.ToString(height + y) + "   Tex width: " + Convert.ToString(myBitmap.Width) + "   Tex height: " + Convert.ToString(myBitmap.Height));
 
                 Rectangle rect = new Rectangle(x, y, width, height);
 
@@ -2127,7 +2426,8 @@ namespace Gamemaker_Recompiler_Visual
                     text = text.Remove(text.LastIndexOf("<index>"), (text.LastIndexOf("</index>") + "</index>".Length) - text.LastIndexOf("<index>"));
 
                     // X
-                    for (var a = Convert.ToInt32(index) + 1; a > 0; a--) {
+                    for (var a = Convert.ToInt32(index) + 1; a > 0; a--)
+                    {
                         int x_a = text.LastIndexOf("<X>") + "<X>".Length;
                         int x_b = text.LastIndexOf("</X>");
                         //MessageBox.Show("X" + a + "   a: " + x_a + "   b: " + x_b);
@@ -2398,7 +2698,7 @@ namespace Gamemaker_Recompiler_Visual
         public static string[] Get_Files(string path)
         {
             string[] files = Directory.GetFiles(path);
-            
+
             return files;
         }
     }
