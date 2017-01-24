@@ -66,6 +66,90 @@ namespace Gamemaker_Recompiler_Visual
             string speed = text.Substring(speed_a, speed_b - speed_a);
             System.Console.WriteLine("Speed: {0}", speed);
 
+            // BACKGROUNDS
+            // BACKGROUNDS
+            string backs = "";
+            string back_amount = "0";
+
+            int backs_a = text.IndexOf("<Backgrounds>") + "<Backgrounds>".Length;
+            int backs_b = text.IndexOf("</Backgrounds>");
+            if (backs_a != "<Backgrounds>".Length-1)
+            {
+                backs = text.Substring(backs_a, backs_b - backs_a);
+
+                // BACKGROUND AMOUNT
+                int back_amount_a = backs.LastIndexOf("<index>") + "<index>".Length;
+                int back_amount_b = backs.LastIndexOf("</index>");
+                back_amount = backs.Substring(back_amount_a, back_amount_b - back_amount_a);
+            }
+
+            // BACKGROUND DATA
+            List<int> back_visible = new List<int> { };
+            List<int> back_fore = new List<int> { };
+            List<string> back_name = new List<string> { };
+            List<int> back_x = new List<int> { };
+            List<int> back_y = new List<int> { };
+            List<int> back_tileX = new List<int> { };
+            List<int> back_tileY = new List<int> { };
+            List<int> back_speedY = new List<int> { };
+            List<int> back_speedX = new List<int> { };
+            List<int> back_stretch = new List<int> { };
+
+            for (var i = 0; i < Convert.ToInt32(back_amount); i++)
+            {
+                // VISIBLE
+                int back_visible_a = backs.IndexOf("<Visible>") + "<Visible>".Length;
+                int back_visible_b = backs.IndexOf("</Visible>");
+                back_visible.Add(Convert.ToInt32(Convert.ToBoolean(backs.Substring(back_visible_a, back_visible_b - back_visible_a))));
+
+                // FOREGROUND
+                int back_fore_a = backs.IndexOf("<Foreground>") + "<Foreground>".Length;
+                int back_fore_b = backs.IndexOf("</Foreground>");
+                back_fore.Add(Convert.ToInt32(Convert.ToBoolean(backs.Substring(back_fore_a, back_fore_b - back_fore_a))));
+
+                // NAME
+                int back_name_a = backs.IndexOf("<Background_Name>") + "<Background_Name>".Length;
+                int back_name_b = backs.IndexOf("</Background_Name>");
+                back_name.Add(backs.Substring(back_name_a, back_name_b - back_name_a));
+
+                // X
+                int back_x_a = backs.IndexOf("<X>") + "<X>".Length;
+                int back_x_b = backs.IndexOf("</X>");
+                back_x.Add(Convert.ToInt32(backs.Substring(back_x_a, back_x_b - back_x_a)));
+
+                // Y
+                int back_y_a = backs.IndexOf("<Y>") + "<Y>".Length;
+                int back_y_b = backs.IndexOf("</Y>");
+                back_y.Add(Convert.ToInt32(backs.Substring(back_y_a, back_y_b - back_y_a)));
+
+                // X TILED
+                int back_tileX_a = backs.IndexOf("<Tiled_X>") + "<Tiled_X>".Length;
+                int back_tileX_b = backs.IndexOf("</Tiled_X>");
+                back_tileX.Add(Convert.ToInt32(backs.Substring(back_tileX_a, back_tileX_b - back_tileX_a)));
+
+                // Y TILED
+                int back_tileY_a = backs.IndexOf("<Tiled_Y>") + "<Tiled_Y>".Length;
+                int back_tileY_b = backs.IndexOf("</Tiled_Y>");
+                back_tileY.Add(Convert.ToInt32(backs.Substring(back_tileY_a, back_tileY_b - back_tileY_a)));
+
+                // SPEED X
+                int back_speedX_a = backs.IndexOf("<Speed_X>") + "<Speed_X>".Length;
+                int back_speedX_b = backs.IndexOf("</Speed_X>");
+                back_speedX.Add(Convert.ToInt32(backs.Substring(back_speedX_a, back_speedX_b - back_speedX_a)));
+
+                // SPEED Y
+                int back_speedY_a = backs.IndexOf("<Tiled_Y>") + "<Tiled_Y>".Length;
+                int back_speedY_b = backs.IndexOf("</Tiled_Y>");
+                back_speedY.Add(Convert.ToInt32(backs.Substring(back_speedY_a, back_speedY_b - back_speedY_a)));
+
+                // STRETCH
+                int back_strech_a = backs.IndexOf("<Stretch>") + "<Stretch>".Length;
+                int back_strech_b = backs.IndexOf("</Stretch>");
+                back_stretch.Add(Convert.ToInt32(Convert.ToBoolean(backs.Substring(back_strech_a, back_strech_b - back_strech_a))));
+
+                backs = backs.Remove(backs.IndexOf("<File.Room.Background>") + "<File.Room.Background>".Length, backs.IndexOf("</File.Room.Background>") - (backs.IndexOf("<File.Room.Background>") + "<File.Room.Background>".Length));
+            }
+
             // OBJECTS
             // OBJECTS
             int objects_a = text.IndexOf("<Objects>") + "<Objects>".Length;
@@ -585,14 +669,31 @@ namespace Gamemaker_Recompiler_Visual
             rewrite += "    </makerSettings>@";
             rewrite += "    <backgrounds>@";
 
+
+            if (text.IndexOf("<Backgrounds>") != -1)
+            {
+                for (var n = 0; n < Convert.ToInt32(back_amount); n++)
+                {
+                    rewrite += "        <background visible=\"" + back_visible[n] + "\" foreground=\"" + back_fore[n]  + "\" name=\"" + back_name[n] + "\" x=\"" + back_x[n] + "\" y=\"" + back_y[n] + "\" htiled=\"" + back_tileX[n] + "\" vtiled=\"" + back_tileY[n] + "\" hspeed=\"" + back_speedX[n] + "\" vspeed=\"" + back_speedY[n] + "\" stretch=\"" + back_stretch[n] + "\"/>@";
+                }
+            }
+            for (var n = 0; n < 8 - (Convert.ToInt32(back_amount)); n++)
+            {
+                rewrite += "        <background visible=\"" + "0" + "\" foreground=\"" + "0" + "\" name=\"" + "" + "\" x=\"" + "0" + "\" y=\"" + "0" + "\" htiled=\"" + "-1" + "\" vtiled=\"" + "-1" + "\" hspeed=\"" + "0" + "\" vspeed=\"" + "0" + "\" stretch=\"" + "0" + "\"/>@";
+            }
+            if (8 - (Convert.ToInt32(back_amount)) == -1)
+            {
+                rewrite += "        <background visible=\"" + "0" + "\" foreground=\"" + "0" + "\" name=\"" + "" + "\" x=\"" + "0" + "\" y=\"" + "0" + "\" htiled=\"" + "-1" + "\" vtiled=\"" + "-1" + "\" hspeed=\"" + "0" + "\" vspeed=\"" + "0" + "\" stretch=\"" + "0" + "\"/>@";
+            }
+
+            /*rewrite += "        <background visible=\"" + "0" + "\" foreground=\"" + "0" + "\" name=\"" + "" + "\" x=\"" + "0" + "\" y=\"" + "0" + "\" htiled=\"" + "-1" + "\" vtiled=\"" + "-1" + "\" hspeed=\"" + "0" + "\" vspeed=\"" + "0" + "\" stretch=\"" + "0" + "\"/>@";
             rewrite += "        <background visible=\"" + "0" + "\" foreground=\"" + "0" + "\" name=\"" + "" + "\" x=\"" + "0" + "\" y=\"" + "0" + "\" htiled=\"" + "-1" + "\" vtiled=\"" + "-1" + "\" hspeed=\"" + "0" + "\" vspeed=\"" + "0" + "\" stretch=\"" + "0" + "\"/>@";
             rewrite += "        <background visible=\"" + "0" + "\" foreground=\"" + "0" + "\" name=\"" + "" + "\" x=\"" + "0" + "\" y=\"" + "0" + "\" htiled=\"" + "-1" + "\" vtiled=\"" + "-1" + "\" hspeed=\"" + "0" + "\" vspeed=\"" + "0" + "\" stretch=\"" + "0" + "\"/>@";
             rewrite += "        <background visible=\"" + "0" + "\" foreground=\"" + "0" + "\" name=\"" + "" + "\" x=\"" + "0" + "\" y=\"" + "0" + "\" htiled=\"" + "-1" + "\" vtiled=\"" + "-1" + "\" hspeed=\"" + "0" + "\" vspeed=\"" + "0" + "\" stretch=\"" + "0" + "\"/>@";
             rewrite += "        <background visible=\"" + "0" + "\" foreground=\"" + "0" + "\" name=\"" + "" + "\" x=\"" + "0" + "\" y=\"" + "0" + "\" htiled=\"" + "-1" + "\" vtiled=\"" + "-1" + "\" hspeed=\"" + "0" + "\" vspeed=\"" + "0" + "\" stretch=\"" + "0" + "\"/>@";
             rewrite += "        <background visible=\"" + "0" + "\" foreground=\"" + "0" + "\" name=\"" + "" + "\" x=\"" + "0" + "\" y=\"" + "0" + "\" htiled=\"" + "-1" + "\" vtiled=\"" + "-1" + "\" hspeed=\"" + "0" + "\" vspeed=\"" + "0" + "\" stretch=\"" + "0" + "\"/>@";
             rewrite += "        <background visible=\"" + "0" + "\" foreground=\"" + "0" + "\" name=\"" + "" + "\" x=\"" + "0" + "\" y=\"" + "0" + "\" htiled=\"" + "-1" + "\" vtiled=\"" + "-1" + "\" hspeed=\"" + "0" + "\" vspeed=\"" + "0" + "\" stretch=\"" + "0" + "\"/>@";
-            rewrite += "        <background visible=\"" + "0" + "\" foreground=\"" + "0" + "\" name=\"" + "" + "\" x=\"" + "0" + "\" y=\"" + "0" + "\" htiled=\"" + "-1" + "\" vtiled=\"" + "-1" + "\" hspeed=\"" + "0" + "\" vspeed=\"" + "0" + "\" stretch=\"" + "0" + "\"/>@";
-            rewrite += "        <background visible=\"" + "0" + "\" foreground=\"" + "0" + "\" name=\"" + "" + "\" x=\"" + "0" + "\" y=\"" + "0" + "\" htiled=\"" + "-1" + "\" vtiled=\"" + "-1" + "\" hspeed=\"" + "0" + "\" vspeed=\"" + "0" + "\" stretch=\"" + "0" + "\"/>@";
+            rewrite += "        <background visible=\"" + "0" + "\" foreground=\"" + "0" + "\" name=\"" + "" + "\" x=\"" + "0" + "\" y=\"" + "0" + "\" htiled=\"" + "-1" + "\" vtiled=\"" + "-1" + "\" hspeed=\"" + "0" + "\" vspeed=\"" + "0" + "\" stretch=\"" + "0" + "\"/>@";*/
 
             rewrite += "    </backgrounds>@";
             rewrite += "    <views>@";
