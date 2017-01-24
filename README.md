@@ -11,4 +11,6 @@ If the program doesn't respond, no worries, it's just working, if any errors com
 
 Thank you to Colinator27 for helping me out with this project.
 
+I AM NOT RESPONSIBLE FOR ANY ILLEGAL USE OF THIS.
+
 PLEASE NOTE THAT YOU MAY NEED TO CONFIGURE A FEW THINGS IN GAMEMAKER STUDIO ITSELF.
