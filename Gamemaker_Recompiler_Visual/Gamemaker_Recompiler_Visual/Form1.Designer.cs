@@ -42,6 +42,7 @@
             this.btn_Images = new System.Windows.Forms.Button();
             this.btn_Images2 = new System.Windows.Forms.Button();
             this.btn_Images3 = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // btn_Sprites
@@ -223,7 +224,7 @@
             this.lbl_Configure_Warning.AutoSize = true;
             this.lbl_Configure_Warning.Font = new System.Drawing.Font("Century", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbl_Configure_Warning.ForeColor = System.Drawing.Color.Red;
-            this.lbl_Configure_Warning.Location = new System.Drawing.Point(66, 532);
+            this.lbl_Configure_Warning.Location = new System.Drawing.Point(80, 532);
             this.lbl_Configure_Warning.Name = "lbl_Configure_Warning";
             this.lbl_Configure_Warning.Size = new System.Drawing.Size(660, 25);
             this.lbl_Configure_Warning.TabIndex = 9;
@@ -295,12 +296,24 @@
             this.btn_Images3.MouseMove += new System.Windows.Forms.MouseEventHandler(this.btn_Images3_MouseMove);
             this.btn_Images3.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btn_Images3_MouseUp);
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Century", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.ForeColor = System.Drawing.Color.Red;
+            this.label1.Location = new System.Drawing.Point(89, 499);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(631, 33);
+            this.label1.TabIndex = 13;
+            this.label1.Text = "I am NOT responsible for any illegal use of this.";
+            // 
             // Form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.ClientSize = new System.Drawing.Size(824, 569);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.btn_Images3);
             this.Controls.Add(this.btn_Images2);
             this.Controls.Add(this.btn_Images);
@@ -339,6 +352,7 @@
         private System.Windows.Forms.Button btn_Images;
         private System.Windows.Forms.Button btn_Images2;
         private System.Windows.Forms.Button btn_Images3;
+        private System.Windows.Forms.Label label1;
     }
 }
 
