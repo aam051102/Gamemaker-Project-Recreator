@@ -7,6 +7,8 @@ To use this, simply download the exe file, then put it in the same folder as the
 You'll then need to double run the exe and then it's pretty much straight forward from there.
 All features are available, some code and id's may be problematic, this will be fixed soon.
 
+The bugs CAN be fixed manually, if you want to know how, just write to me here: https://www.reddit.com/r/Underminers/comments/5powry/wip_gamemaker_studio_recompiler/
+
 If the program doesn't respond, no worries, it's just working, if any errors come up, restart it.
 
 Thank you to Colinator27 for helping me out with this project.
