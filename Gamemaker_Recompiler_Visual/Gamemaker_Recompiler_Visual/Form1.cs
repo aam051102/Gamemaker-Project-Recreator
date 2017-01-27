@@ -361,5 +361,44 @@ namespace Gamemaker_Recompiler_Visual
         {
             btn_Images3.ForeColor = Color.White;
         }
+
+        // PROJECT CREATOR
+        private void btn_Project_Click(object sender, EventArgs e)
+        {
+            DialogResult dialogResult = MessageBox.Show("Have you run everything else?", "Check", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.Yes)
+            {
+                if (running == false)
+                {
+                    running = true;
+                    var loc_a = System.Reflection.Assembly.GetEntryAssembly().Location.LastIndexOf("\\") + "\\".Length;
+                    var loc_b = System.Reflection.Assembly.GetEntryAssembly().Location.Length - loc_a;
+                    Project.Convert_Project_From_Path(System.Reflection.Assembly.GetEntryAssembly().Location.Remove(loc_a));
+                }
+            } else
+            {
+                MessageBox.Show("Please run everything else before creating the project.", "Notice");
+            }
+        }
+
+        private void btn_Project_MouseUp(object sender, MouseEventArgs e)
+        {
+            btn_Project.ForeColor = Color.White;
+        }
+
+        private void btn_Project_MouseDown(object sender, MouseEventArgs e)
+        {
+            btn_Project.ForeColor = Color.Green;
+        }
+
+        private void btn_Project_MouseMove(object sender, MouseEventArgs e)
+        {
+            btn_Project.ForeColor = Color.Yellow;
+        }
+
+        private void btn_Project_MouseLeave(object sender, EventArgs e)
+        {
+            btn_Project.ForeColor = Color.White;
+        }
     }
 }

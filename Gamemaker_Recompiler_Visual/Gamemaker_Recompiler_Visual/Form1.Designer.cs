@@ -43,6 +43,7 @@
             this.btn_Images2 = new System.Windows.Forms.Button();
             this.btn_Images3 = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
+            this.btn_Project = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btn_Sprites
@@ -301,11 +302,33 @@
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Century", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.Color.Red;
-            this.label1.Location = new System.Drawing.Point(89, 499);
+            this.label1.Location = new System.Drawing.Point(93, 499);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(631, 33);
             this.label1.TabIndex = 13;
             this.label1.Text = "I am NOT responsible for any illegal use of this.";
+            // 
+            // btn_Project
+            // 
+            this.btn_Project.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.btn_Project.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.btn_Project.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.btn_Project.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Black;
+            this.btn_Project.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Black;
+            this.btn_Project.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_Project.Font = new System.Drawing.Font("Century", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_Project.ForeColor = System.Drawing.SystemColors.ButtonFace;
+            this.btn_Project.Location = new System.Drawing.Point(225, 433);
+            this.btn_Project.Name = "btn_Project";
+            this.btn_Project.Size = new System.Drawing.Size(379, 71);
+            this.btn_Project.TabIndex = 14;
+            this.btn_Project.Text = "Create Project";
+            this.btn_Project.UseVisualStyleBackColor = false;
+            this.btn_Project.Click += new System.EventHandler(this.btn_Project_Click);
+            this.btn_Project.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btn_Project_MouseDown);
+            this.btn_Project.MouseLeave += new System.EventHandler(this.btn_Project_MouseLeave);
+            this.btn_Project.MouseMove += new System.Windows.Forms.MouseEventHandler(this.btn_Project_MouseMove);
+            this.btn_Project.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btn_Project_MouseUp);
             // 
             // Form
             // 
@@ -313,6 +336,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.ClientSize = new System.Drawing.Size(824, 569);
+            this.Controls.Add(this.btn_Project);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btn_Images3);
             this.Controls.Add(this.btn_Images2);
@@ -353,6 +377,7 @@
         private System.Windows.Forms.Button btn_Images2;
         private System.Windows.Forms.Button btn_Images3;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button btn_Project;
     }
 }
 
