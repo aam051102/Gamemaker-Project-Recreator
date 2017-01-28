@@ -1710,7 +1710,9 @@ namespace Gamemaker_Recompiler_Visual
                 }
                 //MessageBox.Show(script_code);
 
-                script_code = script_code.Replace("self.", "");
+                script_code = script_code.Replace("self.", "").Replace("return // exit;", "exit;");
+
+
 
                 // REWRITE
                 string rewrite = "";
