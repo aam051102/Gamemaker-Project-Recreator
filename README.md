@@ -4,7 +4,7 @@ This is a Gamemaker: Studio project recompiler, I'm building it based on data by
 Link: https://github.com/WarlockD/GMdsam
 
 To use this, simply download the exe file, then put it in the same folder as the Underdecomp exe.
-You'll then need to run the exe and then it's pretty much straight forward from there.
+You'll then need to run the exe and then you just need to press all the buttons, with the "Create Project" last.
 All features are available, some code and id's may be problematic, this will be fixed soon.
 
 The bugs CAN be fixed manually, if you want to know how, just write to me here: https://www.reddit.com/r/Underminers/comments/5powry/wip_gamemaker_studio_recompiler/
