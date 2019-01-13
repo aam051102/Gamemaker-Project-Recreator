@@ -1,4 +1,6 @@
 # Gamemaker-Recompiler
+### PLEASE BE AWARE THAT THIS PROJECT IS NOW DEPRECATED ###
+
 This is a Gamemaker: Studio project recompiler, I'm building it based on data by WarlockD's GMDSam ( Underdecomp ), this means that you'll have to download and use that first.
 
 Link: https://github.com/WarlockD/GMdsam
